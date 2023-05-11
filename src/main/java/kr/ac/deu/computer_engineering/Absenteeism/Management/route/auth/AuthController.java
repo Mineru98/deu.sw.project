@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
@@ -21,10 +22,17 @@ public class AuthController {
             summary = "사용자 로그인",
             description = "사용자 로그인")
     @PostMapping("/login")
-    public ResponseEntity<?> login(HttpServletRequest request) {
+    public ResponseEntity<?> login(
+            HttpServletRequest request,
+            @RequestParam(required = true) String username,
+            @RequestParam(required = true) String password,
+            @RequestParam(required = false) String role
+    ) {
         HttpSession session = request.getSession();
-        session.setAttribute("userId", "username");
-        session.setAttribute("roleList", "ROLE_CEO");
+        session.setAttribute("userId", username + ":" + password);
+        if (role != null) {
+            session.setAttribute("roleList", role);
+        }
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
@@ -35,8 +43,6 @@ public class AuthController {
     @PostMapping("/logout")
     public ResponseEntity<?> logout(HttpServletRequest request) {
         HttpSession session = request.getSession();
-        System.out.println(session.getAttribute("userId"));
-        System.out.println(session.getAttribute("roleList"));
         session.invalidate();
         return new ResponseEntity<>(HttpStatus.OK);
     }

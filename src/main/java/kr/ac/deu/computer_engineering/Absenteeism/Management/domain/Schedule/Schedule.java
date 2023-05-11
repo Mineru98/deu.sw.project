@@ -10,6 +10,7 @@ import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Comment;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
@@ -51,6 +52,9 @@ public class Schedule {
     @Enumerated(EnumType.STRING)
     @Column(length = 64, nullable = false, unique = true)
     private TypeOfTask typeOfTask;
+
+    @Comment("반영날짜")
+    private LocalDateTime applyDateTime;
 
     private LocalDateTime createdAt;
 

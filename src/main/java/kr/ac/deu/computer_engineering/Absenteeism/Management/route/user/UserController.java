@@ -7,12 +7,16 @@ import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.User.dto.Cre
 import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.User.dto.UpdateUserDto;
 import kr.ac.deu.computer_engineering.Absenteeism.Management.service.user.UserService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(value = "/api/user")

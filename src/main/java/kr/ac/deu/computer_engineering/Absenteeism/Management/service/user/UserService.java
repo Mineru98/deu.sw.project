@@ -20,10 +20,10 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class UserService {
-    private final CompanyRepository companyRepository;
     private final TeamRepository teamRepository;
     private final RankRepository rankRepository;
     private final UserRepository userRepository;
+    private final CompanyRepository companyRepository;
 
     // 직원 목록 조회
     @Transactional(readOnly = true)
