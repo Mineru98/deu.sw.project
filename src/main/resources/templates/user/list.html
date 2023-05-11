@@ -13,6 +13,22 @@
 <div class="flex">
     <nav th:replace="~{layouts/menu :: menu}"></nav>
     <main class="flex-1 flex h-screen">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>이름</th>
+                <th>입사일</th>
+                <th>퇴사일</th>
+            </tr>
+            </thead>
+            <tbody>
+                <tr th:each="item : ${userList}">
+                    <td th:text="${item.name}"></td>
+                    <td th:text="${#temporals.format(item.dateOfJoin, 'yyyy-MM-dd')}"></td>
+                    <td th:text="${#temporals.format(item.dateOfLeave, 'yyyy-MM-dd')}"></td>
+                </tr>
+            </tbody>
+        </table>
     </main>
 </div>
 <footer></footer>

@@ -38,6 +38,10 @@ public class HealthCheckHistory {
     @Column(nullable = false)
     private LocalDate applyYear;
 
+    @Comment("검진날짜")
+    @Column()
+    private LocalDate applyDate;
+
     @Comment("직원 Id")
     @JsonBackReference
     @JoinColumn(name = "userId")

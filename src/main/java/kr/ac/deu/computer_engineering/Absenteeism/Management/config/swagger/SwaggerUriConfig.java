@@ -1,4 +1,4 @@
-package kr.ac.deu.computer_engineering.Absenteeism.Management.config;
+package kr.ac.deu.computer_engineering.Absenteeism.Management.config.swagger;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;

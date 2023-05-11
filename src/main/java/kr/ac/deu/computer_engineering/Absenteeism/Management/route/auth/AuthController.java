@@ -9,6 +9,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(value = "/api/auth")
@@ -18,7 +21,10 @@ public class AuthController {
             summary = "사용자 로그인",
             description = "사용자 로그인")
     @PostMapping("/login")
-    public ResponseEntity<?> login() {
+    public ResponseEntity<?> login(HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        session.setAttribute("userId", "username");
+        session.setAttribute("roleList", "ROLE_CEO");
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
@@ -27,7 +33,11 @@ public class AuthController {
             summary = "사용자 로그아웃",
             description = "사용자 로그아웃")
     @PostMapping("/logout")
-    public ResponseEntity<?> logout() {
+    public ResponseEntity<?> logout(HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        System.out.println(session.getAttribute("userId"));
+        System.out.println(session.getAttribute("roleList"));
+        session.invalidate();
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

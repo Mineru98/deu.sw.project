@@ -1,4 +1,4 @@
-package kr.ac.deu.computer_engineering.Absenteeism.Management.config;
+package kr.ac.deu.computer_engineering.Absenteeism.Management.config.swagger;
 
 import io.swagger.v3.oas.models.ExternalDocumentation;
 import io.swagger.v3.oas.models.OpenAPI;

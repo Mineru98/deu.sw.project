@@ -2,6 +2,7 @@ package kr.ac.deu.computer_engineering.Absenteeism.Management.domain.Company;
 
 import lombok.*;
 import org.hibernate.Hibernate;
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Comment;
 import org.hibernate.annotations.DynamicInsert;
 
@@ -27,6 +28,11 @@ public class Company {
     @Column(length = 64)
     private String companyName;
 
+    @Comment("본사여부")
+    @Column(columnDefinition = "TINYINT(1)")
+    @ColumnDefault("0")
+    private Boolean isMain;
+
     @Comment("회사 GPS 좌표 Lat")
     @Column(precision = 18, scale = 15, nullable = true)
     private Double lat;
@@ -37,6 +43,10 @@ public class Company {
 
     @Comment("급여정산날짜")
     private LocalDate settlementDate;
+
+    @Comment("회사 주소")
+    @Column(length = 512)
+    private String address;
 
     @Override
     public boolean equals(Object o) {
