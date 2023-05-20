@@ -12,6 +12,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     // UC-A11 : 직원 정보 상세 조회
     Optional<User> findById(Long id);
 
+    List<User> findAllByDateOfLeaveIsNull();
     // UC-A14 : 직원 정보 등록
 
     // UC-A15 : 직원 정보 수정

@@ -60,7 +60,7 @@ public class ScheduleService {
                 compareEndDate.withHour(6);
                 // 현재 날짜의 오전 9시와 현재 날짜의 1일 뒤의 날짜의 오전 6시 사이에 적용 날짜가 해당이 되어야 출근이 가능하다.
                 if (!(dto.getApplyDateTime().isAfter(compareBeginDate) && dto.getApplyDateTime().isBefore(compareEndDate))) {
-                    throw new Exception("허용 되지 않는 범위의 출근/퇴근 시간입니다.");
+                    throw new Exception("허용 되지 않는 범위의 출근 시간입니다.");
                 }
             } else if (dto.getTypeOfTask().equals("퇴근")) {
                 LocalDateTime compareBeginDate = LocalDateTime.now();
@@ -80,7 +80,7 @@ public class ScheduleService {
                 }
                 // 전 날짜의 오전 9시와 현재 날짜의 날짜의 오전 6시 사이에 적용 날짜가 해당이 되어야 출근이 가능하다.
                 if (!(dto.getApplyDateTime().isAfter(compareBeginDate) && dto.getApplyDateTime().isBefore(compareEndDate))) {
-                    throw new Exception("허용 되지 않는 범위의 출근/퇴근 시간입니다.");
+                    throw new Exception("허용 되지 않는 범위의 퇴근 시간입니다.");
                 }
             }
 

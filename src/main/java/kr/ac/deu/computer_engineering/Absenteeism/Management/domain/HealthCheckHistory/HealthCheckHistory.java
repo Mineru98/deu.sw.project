@@ -36,7 +36,7 @@ public class HealthCheckHistory {
 
     @Comment("적용연도")
     @Column(nullable = false)
-    private LocalDate applyYear;
+    private Integer applyYear;
 
     @Comment("검진날짜")
     @Column()
