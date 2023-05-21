@@ -27,7 +27,7 @@ public class JobService {
     public void calcHealthCheckHistory() {
         Integer currentYear = LocalDate.now().getYear();
         List<User> userList = userRepository.findAllByDateOfLeaveIsNull();
-        List<HealthCheckHistory> histories = healthCheckHistoryRepository.findAllByUserNotInAndApplyDate(userList, currentYear);
+        List<HealthCheckHistory> histories = healthCheckHistoryRepository.findAllByUserNotInAndApplyYear(userList, currentYear);
         List<User> users = histories.stream().map(HealthCheckHistory::getUser).collect(Collectors.toList());
         for (User user: users) {
             HealthCheckHistory healthCheck = new HealthCheckHistory();
