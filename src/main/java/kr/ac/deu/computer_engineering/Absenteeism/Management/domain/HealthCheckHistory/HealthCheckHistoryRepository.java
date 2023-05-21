@@ -6,5 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface HealthCheckHistoryRepository extends JpaRepository<HealthCheckHistory, Long> {
-    List<HealthCheckHistory> findAllByUserNotInAndApplyDate(List<User> user, Integer applyYear);
+    List<HealthCheckHistory> findAllByUserNotInAndApplyYear(List<User> user, Integer applyYear);
 }
