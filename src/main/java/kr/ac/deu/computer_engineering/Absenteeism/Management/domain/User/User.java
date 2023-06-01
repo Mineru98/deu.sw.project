@@ -2,6 +2,7 @@ package kr.ac.deu.computer_engineering.Absenteeism.Management.domain.User;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.Account.Account;
 import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.Company.Company;
 import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.HealthCheckHistory.HealthCheckHistory;
 import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.Rank.Rank;
@@ -96,20 +97,27 @@ public class User {
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private List<Schedule> scheduleList;
 
-    @JsonBackReference
-    @JoinColumn(name = "teamId")
-    @ManyToOne(fetch = FetchType.LAZY, optional = true)
-    private Team team;
+    @JsonManagedReference
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    private List<Account> accountList;
 
-    @JsonBackReference
-    @JoinColumn(name = "rankId")
-    @ManyToOne(fetch = FetchType.LAZY, optional = true)
-    private Rank rank;
-
+    @Comment("회사 Id")
     @JsonBackReference
     @JoinColumn(name = "companyId")
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     private Company company;
+
+    @Comment("부서 Id")
+    @JsonBackReference
+    @JoinColumn(name = "teamId")
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    private Team team;
+
+    @Comment("직급 Id")
+    @JsonBackReference
+    @JoinColumn(name = "rankId")
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    private Rank rank;
 
     @PrePersist
     public void createDate() {

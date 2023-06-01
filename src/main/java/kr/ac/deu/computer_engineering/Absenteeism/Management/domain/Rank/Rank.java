@@ -29,7 +29,7 @@ public class Rank {
 
     @JsonManagedReference
     @OneToMany(mappedBy = "rank", fetch = FetchType.LAZY)
-    private List<AllowanceOfRank> allowanceOfRank;
+    private List<AllowanceOfRank> allowanceOfRankList;
 
     @Override
     public boolean equals(Object o) {

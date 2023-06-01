@@ -1,5 +1,7 @@
 package kr.ac.deu.computer_engineering.Absenteeism.Management.domain.Company;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.User.User;
 import lombok.*;
 import org.hibernate.Hibernate;
 import org.hibernate.annotations.ColumnDefault;
@@ -8,6 +10,7 @@ import org.hibernate.annotations.DynamicInsert;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Objects;
 
 @DynamicInsert
@@ -47,6 +50,11 @@ public class Company {
     @Comment("회사 주소")
     @Column(length = 512)
     private String address;
+
+    @JsonManagedReference
+    @OneToMany(mappedBy = "team", fetch = FetchType.LAZY)
+    private List<User> userList;
+
 
     @Override
     public boolean equals(Object o) {

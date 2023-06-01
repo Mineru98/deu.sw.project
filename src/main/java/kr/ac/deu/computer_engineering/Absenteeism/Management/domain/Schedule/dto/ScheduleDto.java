@@ -37,4 +37,17 @@ public class ScheduleDto {
                 .user(user)
                 .build();
     }
+
+    public Schedule toEntity(User user, LocalDateTime applyDateTime, TypeOfTask typeOfTask) {
+        return Schedule.builder()
+                .description(description)
+                .ip(ip)
+                .lat(lat)
+                .lng(lng)
+                .isVerified(isVerified)
+                .typeOfTask(typeOfTask)
+                .applyDateTime(applyDateTime)
+                .user(user)
+                .build();
+    }
 }
