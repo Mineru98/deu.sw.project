@@ -1,28 +1,13 @@
 package kr.ac.deu.computer_engineering.Absenteeism.Management.service.allowance;
 
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
-import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.Account.Account;
-import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.Account.AccountRepository;
-import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.Account.dto.CreateAccountDto;
-import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.Account.dto.UpdateAccountDto;
 import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.AllowanceOfRank.AllowanceOfRank;
 import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.AllowanceOfRank.AllowanceOfRankRepository;
-import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.AllowanceOfRank.dto.CreateAllowanceOfRankDto;
-import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.AllowanceOfRank.dto.UpdateAllowanceOfRankDto;
-import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.Company.Company;
-import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.Company.CompanyRepository;
+import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.AllowanceOfRank.dto.AllowanceOfRankDto;
 import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.Rank.Rank;
 import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.Rank.RankRepository;
-import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.User.User;
-import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.User.UserRepository;
-import kr.ac.deu.computer_engineering.Absenteeism.Management.service.account.AccountService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -54,7 +39,7 @@ public class AllowanceService {
 
     // 직급별 수당 정보 등록
     @Transactional
-    public void createAllowanceOfRank(CreateAllowanceOfRankDto dto) throws Exception {
+    public void createAllowanceOfRank(AllowanceOfRankDto dto) throws Exception {
         Optional<Rank> rank = rankRepository.findById(dto.getRankId());
         rank.ifPresent(t -> {
             AllowanceOfRank account = dto.toEntity(t);
@@ -65,7 +50,7 @@ public class AllowanceService {
 
     // 직급별 수당 정보 수정
     @Transactional
-    public void updateAllowanceOfRank(Long id, UpdateAllowanceOfRankDto dto) throws Exception {
+    public void updateAllowanceOfRank(Long id, AllowanceOfRankDto dto) throws Exception {
         Optional<AllowanceOfRank> allowanceOfRank = allowanceOfRankRepository.findById(id);
         if (allowanceOfRank.isEmpty()) throw new Exception("존재하지 않는 직급별 수당입니다.");
         allowanceOfRank.ifPresent(t -> {

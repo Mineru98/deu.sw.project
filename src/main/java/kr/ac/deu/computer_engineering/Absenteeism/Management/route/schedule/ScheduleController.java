@@ -2,10 +2,10 @@ package kr.ac.deu.computer_engineering.Absenteeism.Management.route.schedule;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.Account.dto.UpdateAccountDto;
+import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.Account.dto.AccountDto;
 import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.Schedule.Schedule;
-import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.Schedule.dto.CreateScheduleDto;
-import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.Schedule.dto.UpdateScheduleDto;
+import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.Schedule.dto.ScheduleDto;
+import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.Schedule.dto.ScheduleDto;
 import kr.ac.deu.computer_engineering.Absenteeism.Management.service.schedule.ScheduleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -50,7 +50,7 @@ public class ScheduleController {
             summary = "일정 정보 생성",
             description = "일정 정보 생성")
     @PostMapping("")
-    public ResponseEntity<?> createItem(@RequestBody CreateScheduleDto dto) throws Exception {
+    public ResponseEntity<?> createItem(@RequestBody ScheduleDto dto) throws Exception {
         scheduleService.createSchedule(dto);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
@@ -62,7 +62,7 @@ public class ScheduleController {
     @PutMapping("/{scheduleId}")
     public ResponseEntity<?> updateItemById(
             @PathVariable Long scheduleId,
-            @RequestBody UpdateScheduleDto dto
+            @RequestBody ScheduleDto dto
     ) throws Exception {
         scheduleService.updateSchedule(scheduleId, dto);
         return new ResponseEntity<>(HttpStatus.OK);
@@ -73,7 +73,7 @@ public class ScheduleController {
             summary = "일정 Id로 일정 승인",
             description = "일정 승인")
     @PutMapping("/{scheduleId}/approve")
-    public ResponseEntity<?> updateItemApproveById(@PathVariable Long scheduleId, @RequestBody UpdateScheduleDto dto) throws Exception {
+    public ResponseEntity<?> updateItemApproveById(@PathVariable Long scheduleId, @RequestBody ScheduleDto dto) throws Exception {
         scheduleService.approveSchedule(scheduleId, dto);
         return new ResponseEntity<>(HttpStatus.OK);
     }

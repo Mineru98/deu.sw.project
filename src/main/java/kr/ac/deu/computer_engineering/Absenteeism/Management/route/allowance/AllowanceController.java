@@ -3,8 +3,8 @@ package kr.ac.deu.computer_engineering.Absenteeism.Management.route.allowance;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.AllowanceOfRank.AllowanceOfRank;
-import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.AllowanceOfRank.dto.CreateAllowanceOfRankDto;
-import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.AllowanceOfRank.dto.UpdateAllowanceOfRankDto;
+import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.AllowanceOfRank.dto.AllowanceOfRankDto;
+import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.AllowanceOfRank.dto.AllowanceOfRankDto;
 import kr.ac.deu.computer_engineering.Absenteeism.Management.service.allowance.AllowanceService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -44,7 +44,7 @@ public class AllowanceController {
             summary = "직급별 수당 정보 생성",
             description = "직급별 수당 정보 생성")
     @PostMapping("")
-    public ResponseEntity<?> createItem(@RequestBody CreateAllowanceOfRankDto dto) throws Exception {
+    public ResponseEntity<?> createItem(@RequestBody AllowanceOfRankDto dto) throws Exception {
         allowanceService.createAllowanceOfRank(dto);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
@@ -56,7 +56,7 @@ public class AllowanceController {
     @PutMapping("/{id}")
     public ResponseEntity<?> updateItemById(
             @PathVariable Long id,
-            @RequestBody UpdateAllowanceOfRankDto dto
+            @RequestBody AllowanceOfRankDto dto
         ) throws Exception {
         allowanceService.updateAllowanceOfRank(id, dto);
         return new ResponseEntity<>(HttpStatus.OK);

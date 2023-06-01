@@ -3,8 +3,8 @@ package kr.ac.deu.computer_engineering.Absenteeism.Management.route.account;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.Account.Account;
-import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.Account.dto.CreateAccountDto;
-import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.Account.dto.UpdateAccountDto;
+import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.Account.dto.AccountDto;
+import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.Account.dto.AccountDto;
 import kr.ac.deu.computer_engineering.Absenteeism.Management.service.account.AccountService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -44,7 +44,7 @@ public class AccountController {
             summary = "계좌 정보 생성(직원)",
             description = "계좌 정보 생성(직원)")
     @PostMapping("/user")
-    public ResponseEntity<?> createItemForUser(@RequestBody CreateAccountDto dto) throws Exception {
+    public ResponseEntity<?> createItemForUser(@RequestBody AccountDto dto) throws Exception {
         accountService.createAccountForUser(dto);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
@@ -54,7 +54,7 @@ public class AccountController {
             summary = "계좌 정보 생성(회사)",
             description = "계좌 정보 생성(회사)")
     @PostMapping("/company")
-    public ResponseEntity<?> createItemForCompany(@RequestBody CreateAccountDto dto) throws Exception {
+    public ResponseEntity<?> createItemForCompany(@RequestBody AccountDto dto) throws Exception {
         accountService.createAccountForCompany(dto);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
@@ -64,7 +64,7 @@ public class AccountController {
             summary = "계좌 Id로 계좌 정보 수정",
             description = "계좌 정보 수정")
     @PutMapping("/user/{accountId}")
-    public ResponseEntity<?> updateItemForUserById(@PathVariable Long accountId, @RequestBody UpdateAccountDto dto) throws Exception {
+    public ResponseEntity<?> updateItemForUserById(@PathVariable Long accountId, @RequestBody AccountDto dto) throws Exception {
         accountService.updateAccountForUser(accountId, dto);
         return new ResponseEntity<>(HttpStatus.OK);
     }
@@ -74,7 +74,7 @@ public class AccountController {
             summary = "계좌 Id로 계좌 정보 수정",
             description = "계좌 정보 수정")
     @PutMapping("/company/{accountId}")
-    public ResponseEntity<?> updateItemForCompanyById(@PathVariable Long accountId, @RequestBody UpdateAccountDto dto) throws Exception {
+    public ResponseEntity<?> updateItemForCompanyById(@PathVariable Long accountId, @RequestBody AccountDto dto) throws Exception {
         accountService.updateAccountForCompany(accountId, dto);
         return new ResponseEntity<>(HttpStatus.OK);
     }

@@ -8,7 +8,7 @@ import lombok.Data;
 import javax.validation.constraints.NotNull;
 
 @Data
-public class CreateAccountDto {
+public class AccountDto {
     @NotNull
     private String accountNumber;
 

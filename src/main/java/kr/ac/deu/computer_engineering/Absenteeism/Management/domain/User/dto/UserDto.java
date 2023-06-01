@@ -10,7 +10,7 @@ import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 
 @Data
-public class CreateUserDto {
+public class UserDto {
     @NotNull
     private String name; // 직원 이름
 
@@ -19,6 +19,16 @@ public class CreateUserDto {
 
     @NotNull
     private LocalDate dateOfJoin; // 입사일
+
+    private LocalDate dateOfLeave; // 입사일
+
+    private String contactNumber; // 연락처
+
+    private String networkMacAddress; // MAC 주소
+
+    private Boolean isManager; // 관리자 여부
+
+    private Boolean isOfficer; // 사무직 여부
 
     @NotNull
     private LocalDate birthDay; // 생년월일

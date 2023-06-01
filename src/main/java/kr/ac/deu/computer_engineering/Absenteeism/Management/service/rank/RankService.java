@@ -1,13 +1,8 @@
 package kr.ac.deu.computer_engineering.Absenteeism.Management.service.rank;
 
-import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.Company.Company;
-import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.Company.dto.CreateCompanyDto;
 import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.Rank.Rank;
 import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.Rank.RankRepository;
-import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.Rank.dto.CreateRankDto;
-import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.Rank.dto.UpdateRankDto;
-import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.Team.Team;
-import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.Team.dto.UpdateTeamDto;
+import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.Rank.dto.RankDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -36,14 +31,14 @@ public class RankService {
 
     // 직급 정보 등록
     @Transactional
-    public void createRank(CreateRankDto dto) throws Exception {
+    public void createRank(RankDto dto) throws Exception {
         Rank rank = dto.toEntity();
         rankRepository.save(rank);
     }
 
     // 직급 정보 수정
     @Transactional
-    public void updateRank(Long rankId, UpdateRankDto dto) throws Exception {
+    public void updateRank(Long rankId, RankDto dto) throws Exception {
         Optional<Rank> rank = rankRepository.findById(rankId);
         if (rank.isEmpty()) throw new Exception("존재하지 않는 부서입니다.");
         rank.ifPresent(t -> {

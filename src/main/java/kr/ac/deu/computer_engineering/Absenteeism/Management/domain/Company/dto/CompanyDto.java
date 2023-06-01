@@ -7,7 +7,7 @@ import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 
 @Data
-public class UpdateCompanyDto {
+public class CompanyDto {
     @NotNull
     private String companyName; // 회사명
 

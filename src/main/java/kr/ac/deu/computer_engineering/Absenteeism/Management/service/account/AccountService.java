@@ -2,12 +2,9 @@ package kr.ac.deu.computer_engineering.Absenteeism.Management.service.account;
 
 import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.Account.Account;
 import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.Account.AccountRepository;
-import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.Account.dto.CreateAccountDto;
-import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.Account.dto.UpdateAccountDto;
+import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.Account.dto.AccountDto;
 import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.Company.Company;
 import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.Company.CompanyRepository;
-import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.Company.dto.CreateCompanyDto;
-import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.Company.dto.UpdateCompanyDto;
 import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.User.User;
 import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.User.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -40,7 +37,7 @@ public class AccountService {
 
     // 회사 계좌 정보 등록
     @Transactional
-    public void createAccountForCompany(CreateAccountDto dto) throws Exception {
+    public void createAccountForCompany(AccountDto dto) throws Exception {
         Optional<Company> company = companyRepository.findById(dto.getCompanyId());
         company.ifPresent(t -> {
             Account account = dto.toEntity(t);
@@ -50,7 +47,7 @@ public class AccountService {
 
     // 직원 계좌 정보 등록
     @Transactional
-    public void createAccountForUser(CreateAccountDto dto) throws Exception {
+    public void createAccountForUser(AccountDto dto) throws Exception {
         Optional<User> user = userRepository.findById(dto.getUserId());
         user.ifPresent(t -> {
             Account account = dto.toEntity(t);
@@ -60,7 +57,7 @@ public class AccountService {
 
     // 회사 계좌 정보 수정
     @Transactional
-    public void updateAccountForCompany(Long accountId, UpdateAccountDto dto) throws Exception {
+    public void updateAccountForCompany(Long accountId, AccountDto dto) throws Exception {
         Optional<Account> account = accountRepository.findById(accountId);
         if (account.isEmpty()) throw new Exception("존재하지 않는 계좌입니다.");
         account.ifPresent(t -> {
@@ -77,7 +74,7 @@ public class AccountService {
 
     // 직원 계좌 정보 수정
     @Transactional
-    public void updateAccountForUser(Long accountId, UpdateAccountDto dto) throws Exception {
+    public void updateAccountForUser(Long accountId, AccountDto dto) throws Exception {
         Optional<Account> account = accountRepository.findById(accountId);
         if (account.isEmpty()) throw new Exception("존재하지 않는 계좌입니다.");
         account.ifPresent(t -> {

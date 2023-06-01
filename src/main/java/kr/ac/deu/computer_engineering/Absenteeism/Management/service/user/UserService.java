@@ -8,8 +8,7 @@ import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.Team.Team;
 import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.Team.TeamRepository;
 import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.User.User;
 import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.User.UserRepository;
-import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.User.dto.CreateUserDto;
-import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.User.dto.UpdateUserDto;
+import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.User.dto.UserDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -41,7 +40,7 @@ public class UserService {
 
     // 직원 등록
     @Transactional
-    public void createUser(CreateUserDto dto) throws Exception {
+    public void createUser(UserDto dto) throws Exception {
         Optional<Company> company = companyRepository.findById(dto.getRankId());
         if (company.isEmpty()) throw new Exception("존재하지 않는 회사입니다.");
         Optional<Team> team = teamRepository.findById(dto.getRankId());
@@ -54,7 +53,7 @@ public class UserService {
 
     // 직원 수정
     @Transactional
-    public void updateUser(Long userId, UpdateUserDto dto) throws Exception {
+    public void updateUser(Long userId, UserDto dto) throws Exception {
         Optional<User> user = userRepository.findById(userId);
         if (user.isEmpty()) throw new Exception("존재하지 않는 직원입니다.");
         user.ifPresent(t -> {

@@ -2,8 +2,7 @@ package kr.ac.deu.computer_engineering.Absenteeism.Management.service.team;
 
 import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.Team.Team;
 import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.Team.TeamRepository;
-import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.Team.dto.CreateTeamDto;
-import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.Team.dto.UpdateTeamDto;
+import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.Team.dto.TeamDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,14 +31,14 @@ public class TeamService {
 
     // 부서 정보 등록
     @Transactional
-    public void createTeam(CreateTeamDto dto) throws Exception {
+    public void createTeam(TeamDto dto) throws Exception {
         Team team = dto.toEntity();
         teamRepository.save(team);
     }
 
     // 부서 정보 수정
     @Transactional
-    public void updateTeam(Long teamId, UpdateTeamDto dto) throws Exception {
+    public void updateTeam(Long teamId, TeamDto dto) throws Exception {
         Optional<Team> team = teamRepository.findById(teamId);
         if (team.isEmpty()) throw new Exception("존재하지 않는 부서입니다.");
         team.ifPresent(t -> {

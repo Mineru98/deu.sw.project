@@ -7,7 +7,7 @@ import lombok.Data;
 import javax.validation.constraints.NotNull;
 
 @Data
-public class UpdateAllowanceOfRankDto {
+public class AllowanceOfRankDto {
     @NotNull
     private Long amount;
 

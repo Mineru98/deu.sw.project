@@ -1,12 +1,8 @@
 package kr.ac.deu.computer_engineering.Absenteeism.Management.service.schedule;
 
-import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.Rank.Rank;
-import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.Rank.dto.CreateRankDto;
-import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.Rank.dto.UpdateRankDto;
 import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.Schedule.Schedule;
 import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.Schedule.ScheduleRepository;
-import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.Schedule.dto.CreateScheduleDto;
-import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.Schedule.dto.UpdateScheduleDto;
+import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.Schedule.dto.ScheduleDto;
 import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.User.User;
 import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.User.UserRepository;
 import kr.ac.deu.computer_engineering.Absenteeism.Management.enums.TypeOfTask;
@@ -45,7 +41,7 @@ public class ScheduleService {
 
     // 일정 등록
     @Transactional
-    public void createSchedule(CreateScheduleDto dto) throws Exception {
+    public void createSchedule(ScheduleDto dto) throws Exception {
         Optional<User> user = userRepository.findById(dto.getUserId());
         if (user.isEmpty()) throw new Exception("존재하지 않는 직원입니다.");
         else {
@@ -56,7 +52,7 @@ public class ScheduleService {
 
     // 일정 수정
     @Transactional
-    public void updateSchedule(Long id, UpdateScheduleDto dto) throws Exception {
+    public void updateSchedule(Long id, ScheduleDto dto) throws Exception {
         Optional<Schedule> schedule = scheduleRepository.findById(id);
         if (schedule.isEmpty()) throw new Exception("존재하지 않는 일정입니다.");
         schedule.ifPresent(t -> {
@@ -72,7 +68,7 @@ public class ScheduleService {
 
     // 일정 승락
     @Transactional
-    public void approveSchedule(Long id, UpdateScheduleDto dto) throws Exception {
+    public void approveSchedule(Long id, ScheduleDto dto) throws Exception {
         Optional<Schedule> schedule = scheduleRepository.findById(id);
         if (schedule.isEmpty()) throw new Exception("존재하지 않는 일정입니다.");
         schedule.ifPresent(t -> {

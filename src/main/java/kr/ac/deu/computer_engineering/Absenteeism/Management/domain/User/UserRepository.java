@@ -9,6 +9,10 @@ public interface UserRepository extends JpaRepository<User, Long> {
     // UC-A10 : 이름으로 직원 목록 조회
     List<User> findAllByNameContaining(String Name);
 
+    Long countByUsername(String username);
+
+    Optional<User> findByUsernameAndPassword(String username, String password);
+
     // UC-A11 : 직원 정보 상세 조회
     Optional<User> findById(Long id);
 

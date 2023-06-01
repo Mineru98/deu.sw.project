@@ -3,8 +3,8 @@ package kr.ac.deu.computer_engineering.Absenteeism.Management.route.company;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.Company.Company;
-import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.Company.dto.CreateCompanyDto;
-import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.Company.dto.UpdateCompanyDto;
+import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.Company.dto.CompanyDto;
+import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.Company.dto.CompanyDto;
 import kr.ac.deu.computer_engineering.Absenteeism.Management.service.company.CompanyService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -45,7 +45,7 @@ public class CompanyController {
             description = "회사 정보 생성")
     @PostMapping("")
     public ResponseEntity<?> createItem(
-            @RequestBody CreateCompanyDto dto
+            @RequestBody CompanyDto dto
     ) throws Exception {
         companyService.createCompany(dto);
         return new ResponseEntity<>(HttpStatus.CREATED);
@@ -57,7 +57,7 @@ public class CompanyController {
             description = "회사 정보 수정")
     @PutMapping("/{companyId}")
     public ResponseEntity<?> updateItemById(
-            @RequestBody UpdateCompanyDto dto,
+            @RequestBody CompanyDto dto,
             @PathVariable Long companyId) throws Exception {
         companyService.updateCompany(companyId, dto);
         return new ResponseEntity<>(HttpStatus.OK);

@@ -3,10 +3,10 @@ package kr.ac.deu.computer_engineering.Absenteeism.Management.route.rank;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.Company.Company;
-import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.Company.dto.CreateCompanyDto;
+import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.Company.dto.CompanyDto;
 import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.Rank.Rank;
-import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.Rank.dto.CreateRankDto;
-import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.Rank.dto.UpdateRankDto;
+import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.Rank.dto.RankDto;
+import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.Rank.dto.RankDto;
 import kr.ac.deu.computer_engineering.Absenteeism.Management.service.rank.RankService;
 import kr.ac.deu.computer_engineering.Absenteeism.Management.service.team.TeamService;
 import lombok.RequiredArgsConstructor;
@@ -41,7 +41,7 @@ public class RankController {
     @Tag(name = "직급")
     @Operation(summary = "직급 정보 생성", description = "직급 정보 생성")
     @PostMapping("")
-    public ResponseEntity<?> createItem(@RequestBody CreateRankDto dto) throws Exception {
+    public ResponseEntity<?> createItem(@RequestBody RankDto dto) throws Exception {
         rankService.createRank(dto);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
@@ -51,7 +51,7 @@ public class RankController {
     @PutMapping("/{rankId}")
     public ResponseEntity<?> updateItemById(
             @PathVariable Long rankId,
-            @RequestBody UpdateRankDto dto) throws Exception {
+            @RequestBody RankDto dto) throws Exception {
         rankService.updateRank(rankId, dto);
         return new ResponseEntity<>(HttpStatus.OK);
     }

@@ -3,8 +3,8 @@ package kr.ac.deu.computer_engineering.Absenteeism.Management.route.team;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.Team.Team;
-import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.Team.dto.CreateTeamDto;
-import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.Team.dto.UpdateTeamDto;
+import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.Team.dto.TeamDto;
+import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.Team.dto.TeamDto;
 import kr.ac.deu.computer_engineering.Absenteeism.Management.service.team.TeamService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -45,7 +45,7 @@ public class TeamController {
             description = "부서 정보 생성")
     @PostMapping("")
     public ResponseEntity<?> createItem(
-            @RequestBody CreateTeamDto dto
+            @RequestBody TeamDto dto
     ) throws Exception {
         teamService.createTeam(dto);
         return new ResponseEntity<>(HttpStatus.CREATED);
@@ -58,7 +58,7 @@ public class TeamController {
     @PutMapping("/{teamId}")
     public ResponseEntity<?> updateItemById(
             @PathVariable Long teamId,
-            @RequestBody UpdateTeamDto dto) throws Exception {
+            @RequestBody TeamDto dto) throws Exception {
         teamService.updateTeam(teamId, dto);
         return new ResponseEntity<>(HttpStatus.OK);
     }

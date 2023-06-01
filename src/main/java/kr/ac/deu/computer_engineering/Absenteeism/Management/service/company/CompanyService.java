@@ -2,12 +2,7 @@ package kr.ac.deu.computer_engineering.Absenteeism.Management.service.company;
 
 import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.Company.Company;
 import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.Company.CompanyRepository;
-import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.Company.dto.CreateCompanyDto;
-import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.Company.dto.UpdateCompanyDto;
-import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.Rank.Rank;
-import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.Team.Team;
-import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.User.User;
-import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.User.dto.CreateUserDto;
+import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.Company.dto.CompanyDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -36,14 +31,14 @@ public class CompanyService {
 
     // 회사 정보 등록
     @Transactional
-    public void createCompany(CreateCompanyDto dto) throws Exception {
+    public void createCompany(CompanyDto dto) throws Exception {
         Company company = dto.toEntity();
         companyRepository.save(company);
     }
 
     // 회사 정보 수정
     @Transactional
-    public void updateCompany(Long companyId, UpdateCompanyDto dto) throws Exception {
+    public void updateCompany(Long companyId, CompanyDto dto) throws Exception {
         Optional<Company> comp = companyRepository.findById(companyId);
         if (comp.isEmpty()) throw new Exception("존재하지 않는 회사입니다.");
         comp.ifPresent(t -> {

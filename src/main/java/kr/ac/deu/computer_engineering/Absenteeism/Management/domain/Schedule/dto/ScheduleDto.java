@@ -8,7 +8,7 @@ import lombok.Data;
 import java.time.LocalDateTime;
 
 @Data
-public class UpdateScheduleDto {
+public class ScheduleDto {
     private String description;
 
     private String ip;

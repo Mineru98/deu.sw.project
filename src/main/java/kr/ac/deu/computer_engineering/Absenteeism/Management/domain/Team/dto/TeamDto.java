@@ -6,7 +6,7 @@ import lombok.Data;
 import javax.validation.constraints.NotNull;
 
 @Data
-public class UpdateTeamDto {
+public class TeamDto {
     @NotNull
     private String teamName;
 

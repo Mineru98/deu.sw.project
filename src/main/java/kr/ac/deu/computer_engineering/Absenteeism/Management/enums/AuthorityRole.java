@@ -10,4 +10,7 @@ public enum AuthorityRole {
     AuthorityRole(String value) {
         this.value = value;
     }
+    public String value() {
+        return this.value;
+    }
 }
