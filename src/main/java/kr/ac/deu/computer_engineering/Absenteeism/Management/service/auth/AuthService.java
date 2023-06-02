@@ -6,6 +6,7 @@ import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.UserAndRole.
 import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.UserAndRole.UserAndRoleRepository;
 import kr.ac.deu.computer_engineering.Absenteeism.Management.handler.exception.CustomIllegalStateExceptionHandler;
 import kr.ac.deu.computer_engineering.Absenteeism.Management.route.auth.dto.AuthDto;
+import kr.ac.deu.computer_engineering.Absenteeism.Management.utils.Encrypt;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,7 +28,8 @@ public class AuthService {
         AuthDto authDto = new AuthDto();
         Long checkUsername = userRepository.countByUsername(username);
         if (checkUsername > 0) {
-            Optional<User> checkUsernameAndPassword = userRepository.findByUsernameAndPassword(username, password);
+            String encodingPassword = Encrypt.encode(password);
+            Optional<User> checkUsernameAndPassword = userRepository.findByUsernameAndPassword(username, encodingPassword);
             if (checkUsernameAndPassword.isPresent()) {
                 User user = checkUsernameAndPassword.get();
                 authDto.setTeamId(user.getTeam().getId());

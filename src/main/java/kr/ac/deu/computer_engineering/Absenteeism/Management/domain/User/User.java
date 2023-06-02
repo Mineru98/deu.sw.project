@@ -63,7 +63,7 @@ public class User {
     private String contactNumber;
 
     @Comment("네트워크 MAC 주소")
-    @Column(length = 14)
+    @Column(length = 18)
     private String networkMacAddress;
 
     @Comment("관리자 여부")

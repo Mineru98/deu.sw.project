@@ -8,16 +8,16 @@ import javax.validation.constraints.NotNull;
 
 @Data
 public class AllowanceOfRankDto {
-    @NotNull
+    @NotNull(message = "금액을 입력해주세요.")
     private Long amount;
 
-    @NotNull
+    @NotNull(message = "최소구간을 입력해주세요.")
     private Long minInterval;
 
-    @NotNull
+    @NotNull(message = "최대구간을 입력해주세요.")
     private Long maxInterval;
 
-    @NotNull
+    @NotNull(message = "직급을 선택해주세요.")
     private Long rankId;
 
     public AllowanceOfRank toEntity(Rank rank) {

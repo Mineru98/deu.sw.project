@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.User.User;
 import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.User.dto.UserDto;
+import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.User.dto.UserMapping;
 import kr.ac.deu.computer_engineering.Absenteeism.Management.service.user.UserService;
 import kr.ac.deu.computer_engineering.Absenteeism.Management.utils.RoleValidate;
 import lombok.RequiredArgsConstructor;
@@ -36,7 +37,7 @@ public class UserController {
             @RequestParam(required = false) String q) {
         HttpSession session = request.getSession();
         if (RoleValidate.isRoleCeo(session) || RoleValidate.isRoleManager(session)) {
-            List<User> userList = userService.getList(q);
+            List<UserMapping> userList = userService.getList(q);
             return new ResponseEntity<>(userList, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
@@ -54,7 +55,7 @@ public class UserController {
         HttpSession session = request.getSession();
         Long sUserId = RoleValidate.getUserId(session);
         if (Objects.equals(sUserId, userId) || RoleValidate.isRoleCeo(session) || RoleValidate.isRoleManager(session)) {
-            User user = userService.getUserById(userId);
+            UserMapping user = userService.getUserById(userId);
             return new ResponseEntity<>(user, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);

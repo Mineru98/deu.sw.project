@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.Company.Company;
 import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.Company.dto.CompanyDto;
+import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.Company.dto.CompanyMapping;
 import kr.ac.deu.computer_engineering.Absenteeism.Management.service.company.CompanyService;
 import kr.ac.deu.computer_engineering.Absenteeism.Management.utils.RoleValidate;
 import lombok.RequiredArgsConstructor;
@@ -33,7 +34,7 @@ public class CompanyController {
     public ResponseEntity<?> getItemList(
             HttpServletRequest request,
             @RequestParam(required = false) String q) {
-        List<Company> result = companyService.getList(q);
+        List<CompanyMapping> result = companyService.getList(q);
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
@@ -47,7 +48,7 @@ public class CompanyController {
             @PathVariable Long companyId) {
         HttpSession session = request.getSession();
         if (RoleValidate.isRoleCeo(session)) {
-            Company comp = companyService.getCompanyById(companyId);
+            CompanyMapping comp = companyService.getCompanyById(companyId);
             return new ResponseEntity<>(comp, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);

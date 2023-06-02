@@ -3,6 +3,7 @@ package kr.ac.deu.computer_engineering.Absenteeism.Management.service.company;
 import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.Company.Company;
 import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.Company.CompanyRepository;
 import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.Company.dto.CompanyDto;
+import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.Company.dto.CompanyMapping;
 import kr.ac.deu.computer_engineering.Absenteeism.Management.handler.exception.CustomIllegalStateExceptionHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -18,14 +19,14 @@ public class CompanyService {
 
     // 회사 정보 목록 조회
     @Transactional(readOnly = true)
-    public List<Company> getList(String name) {
-        return companyRepository.findAllByCompanyNameContaining(name);
+    public List<CompanyMapping> getList(String name) {
+        return companyRepository.findAllByCompanyNameContaining(name, CompanyMapping.class);
     }
 
     // 회사 정보 상세 조회
     @Transactional(readOnly = true)
-    public Company getCompanyById(Long companyId) {
-        Optional<Company> comp = companyRepository.findById(companyId);
+    public CompanyMapping getCompanyById(Long companyId) {
+        Optional<CompanyMapping> comp = companyRepository.findById(companyId, CompanyMapping.class);
         if (comp.isEmpty()) throw new CustomIllegalStateExceptionHandler("존재하지 않는 회사입니다.");
         return comp.get();
     }

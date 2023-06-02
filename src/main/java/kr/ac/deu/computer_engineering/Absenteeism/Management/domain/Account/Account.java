@@ -1,10 +1,7 @@
 package kr.ac.deu.computer_engineering.Absenteeism.Management.domain.Account;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.Company.Company;
-import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.Schedule.Schedule;
-import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.Statement.Statement;
 import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.User.User;
 import lombok.*;
 import org.hibernate.Hibernate;
@@ -12,7 +9,6 @@ import org.hibernate.annotations.Comment;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Objects;
 
 @Builder

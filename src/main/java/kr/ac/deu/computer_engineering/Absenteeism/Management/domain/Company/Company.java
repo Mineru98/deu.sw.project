@@ -52,7 +52,7 @@ public class Company {
     private String address;
 
     @JsonManagedReference
-    @OneToMany(mappedBy = "team", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "company", fetch = FetchType.LAZY)
     private List<User> userList;
 
 

@@ -11,6 +11,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @RestController
@@ -24,7 +26,9 @@ public class TeamController {
             summary = "부서 목록 조회",
             description = "부서 목록 조회")
     @GetMapping("")
-    public ResponseEntity<?> getItemList(@RequestParam(required = false) String q) {
+    public ResponseEntity<?> getItemList(
+            @RequestParam(required = false) String q
+    ) {
         List<Team> result = teamService.getList(q);
         return new ResponseEntity<>(result, HttpStatus.OK);
     }

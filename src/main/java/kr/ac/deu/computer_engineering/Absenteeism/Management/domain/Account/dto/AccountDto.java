@@ -9,10 +9,10 @@ import javax.validation.constraints.NotNull;
 
 @Data
 public class AccountDto {
-    @NotNull
+    @NotNull(message = "계좌 번호가 입력해주세요.")
     private String accountNumber;
 
-    @NotNull
+    @NotNull(message = "은행명이 입력해주세요.")
     private String nameOfBank;
 
     private String description;

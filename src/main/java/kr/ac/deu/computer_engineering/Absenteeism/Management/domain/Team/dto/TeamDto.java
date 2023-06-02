@@ -7,7 +7,7 @@ import javax.validation.constraints.NotNull;
 
 @Data
 public class TeamDto {
-    @NotNull
+    @NotNull(message = "부서명을 입력해주세요.")
     private String teamName;
 
     public Team toEntity() {

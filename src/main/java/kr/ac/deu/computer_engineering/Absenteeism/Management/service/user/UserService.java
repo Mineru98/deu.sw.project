@@ -9,11 +9,15 @@ import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.Team.TeamRep
 import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.User.User;
 import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.User.UserRepository;
 import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.User.dto.UserDto;
+import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.User.dto.UserMapping;
 import kr.ac.deu.computer_engineering.Absenteeism.Management.handler.exception.CustomIllegalStateExceptionHandler;
+import kr.ac.deu.computer_engineering.Absenteeism.Management.utils.Encrypt;
+import kr.ac.deu.computer_engineering.Absenteeism.Management.utils.Formatter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.text.Format;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,15 +31,17 @@ public class UserService {
 
     // 직원 목록 조회
     @Transactional(readOnly = true)
-    public List<User> getList(String name) {
-        return userRepository.findAllByNameContaining(name);
+    public List<UserMapping> getList(String name) {
+        return userRepository.findAllByNameContaining(name, UserMapping.class);
     }
 
     // 직원 상세 조회
     @Transactional(readOnly = true)
-    public User getUserById(Long userId) {
-        Optional<User> user = userRepository.findById(userId);
+    public UserMapping getUserById(Long userId) {
+        Optional<UserMapping> user = userRepository.findById(userId, UserMapping.class);
         if (user.isEmpty()) throw new CustomIllegalStateExceptionHandler("존재하지 않는 직원입니다.");
+        String contactNumber = Formatter.convertPhoneNumber(user.get().getContactNumber());
+        user.get().setContactNumber(contactNumber);
         return user.get();
     }
 
@@ -60,13 +66,13 @@ public class UserService {
         user.ifPresent(t -> {
             t.setUsername(dto.getUsername());
             t.setName(dto.getName());
-            t.setDateOfJoin(dto.getDateOfJoin()); // TODO : SHA3-512 암호화 해야함.
+            t.setPassword(Encrypt.encode(dto.getPassword()));
+            t.setDateOfJoin(dto.getDateOfJoin());
             t.setDateOfLeave(dto.getDateOfLeave());
             t.setContactNumber(dto.getContactNumber());
             t.setNetworkMacAddress(dto.getNetworkMacAddress());
             t.setIsManager(dto.getIsManager());
             t.setIsOfficer(dto.getIsOfficer());
-
             if (dto.getCompanyId() != null) {
                 Optional<Company> company = companyRepository.findById(dto.getCompanyId());
                 company.ifPresent(t::setCompany);

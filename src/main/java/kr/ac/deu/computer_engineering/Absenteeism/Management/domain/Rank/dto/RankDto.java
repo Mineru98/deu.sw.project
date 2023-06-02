@@ -7,7 +7,7 @@ import javax.validation.constraints.NotNull;
 
 @Data
 public class RankDto {
-    @NotNull
+    @NotNull(message = "직급명을 입력해주세요.")
     private String rankName;
 
     public Rank toEntity() {

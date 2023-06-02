@@ -1,6 +1,7 @@
 package kr.ac.deu.computer_engineering.Absenteeism.Management.route.user;
 
 import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.User.User;
+import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.User.dto.UserMapping;
 import kr.ac.deu.computer_engineering.Absenteeism.Management.route.user.dto.UserDto;
 import kr.ac.deu.computer_engineering.Absenteeism.Management.service.user.UserService;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +24,7 @@ public class UserViewController {
         model.addAttribute("title", "사용자 목록 페이지");
         String name = req.getParameter("name");
         // 3, 4 실행
-        List<User> userList = userService.getList(name);
+        List<UserMapping> userList = userService.getList(name);
         // View에게 Controller로부터
         model.addAttribute("userList", userList);
         return "user/list.html";
