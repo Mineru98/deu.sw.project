@@ -24,7 +24,7 @@ public class AllowanceController {
             summary = "직급별 수당 목록 조회",
             description = "직급별 수당 목록 조회")
     @GetMapping("")
-    public ResponseEntity<?> getItemList(@RequestParam(required = true) Long rankId) throws Exception {
+    public ResponseEntity<?> getItemList(@RequestParam(required = true) Long rankId) {
         List<AllowanceOfRank> result = allowanceService.getList(rankId);
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
@@ -34,7 +34,7 @@ public class AllowanceController {
             summary = "직급별 수당 Id로 상세 조회",
             description = "직급별 수당 상세 조회")
     @GetMapping("/{id}")
-    public ResponseEntity<?> getItemById(@PathVariable Long id) throws Exception {
+    public ResponseEntity<?> getItemById(@PathVariable Long id) {
         AllowanceOfRank allowanceOfRank = allowanceService.getAccountById(id);
         return new ResponseEntity<>(allowanceOfRank, HttpStatus.OK);
     }
@@ -44,7 +44,7 @@ public class AllowanceController {
             summary = "직급별 수당 정보 생성",
             description = "직급별 수당 정보 생성")
     @PostMapping("")
-    public ResponseEntity<?> createItem(@RequestBody AllowanceOfRankDto dto) throws Exception {
+    public ResponseEntity<?> createItem(@RequestBody AllowanceOfRankDto dto) {
         allowanceService.createAllowanceOfRank(dto);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
@@ -57,7 +57,7 @@ public class AllowanceController {
     public ResponseEntity<?> updateItemById(
             @PathVariable Long id,
             @RequestBody AllowanceOfRankDto dto
-        ) throws Exception {
+        ) {
         allowanceService.updateAllowanceOfRank(id, dto);
         return new ResponseEntity<>(HttpStatus.OK);
     }
@@ -67,7 +67,7 @@ public class AllowanceController {
             summary = "직급별 수당 Id로 직급별 수당 정보 삭제",
             description = "직급별 수당 정보 삭제")
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteItemById(@PathVariable Long id) throws Exception {
+    public ResponseEntity<?> deleteItemById(@PathVariable Long id) {
         allowanceService.deleteAllowanceOfRank(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }

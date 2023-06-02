@@ -33,7 +33,7 @@ public class RankController {
     @Tag(name = "직급")
     @Operation(summary = "직급 Id로 상세 조회", description = "직급 상세 조회")
     @GetMapping("/{rankId}")
-    public ResponseEntity<?> getItemById(@PathVariable Long rankId) throws Exception {
+    public ResponseEntity<?> getItemById(@PathVariable Long rankId) {
         Rank rank = rankService.getRankById(rankId);
         return new ResponseEntity<>(rank, HttpStatus.OK);
     }
@@ -41,7 +41,7 @@ public class RankController {
     @Tag(name = "직급")
     @Operation(summary = "직급 정보 생성", description = "직급 정보 생성")
     @PostMapping("")
-    public ResponseEntity<?> createItem(@RequestBody RankDto dto) throws Exception {
+    public ResponseEntity<?> createItem(@RequestBody RankDto dto) {
         rankService.createRank(dto);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
@@ -51,7 +51,7 @@ public class RankController {
     @PutMapping("/{rankId}")
     public ResponseEntity<?> updateItemById(
             @PathVariable Long rankId,
-            @RequestBody RankDto dto) throws Exception {
+            @RequestBody RankDto dto) {
         rankService.updateRank(rankId, dto);
         return new ResponseEntity<>(HttpStatus.OK);
     }
@@ -59,7 +59,7 @@ public class RankController {
     @Tag(name = "직급")
     @Operation(summary = "직급 Id로 직급 정보 삭제", description = "직급 정보 삭제")
     @DeleteMapping("/{rankId}")
-    public ResponseEntity<?> deleteItemById(@PathVariable Long rankId) throws Exception {
+    public ResponseEntity<?> deleteItemById(@PathVariable Long rankId) {
         rankService.deleteRank(rankId);
         return new ResponseEntity<>(HttpStatus.OK);
     }

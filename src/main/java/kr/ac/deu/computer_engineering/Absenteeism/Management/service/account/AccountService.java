@@ -7,6 +7,7 @@ import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.Company.Comp
 import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.Company.CompanyRepository;
 import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.User.User;
 import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.User.UserRepository;
+import kr.ac.deu.computer_engineering.Absenteeism.Management.handler.exception.CustomIllegalStateExceptionHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,15 +30,15 @@ public class AccountService {
 
     // 계좌 정보 상세 조회
     @Transactional(readOnly = true)
-    public Account getAccountById(Long accountId) throws Exception {
+    public Account getAccountById(Long accountId) {
         Optional<Account> account = accountRepository.findById(accountId);
-        if (account.isEmpty()) throw new Exception("존재하지 않는 계좌입니다.");
+        if (account.isEmpty()) throw new CustomIllegalStateExceptionHandler("존재하지 않는 계좌입니다.");
         return account.get();
     }
 
     // 회사 계좌 정보 등록
     @Transactional
-    public void createAccountForCompany(AccountDto dto) throws Exception {
+    public void createAccountForCompany(AccountDto dto) {
         Optional<Company> company = companyRepository.findById(dto.getCompanyId());
         company.ifPresent(t -> {
             Account account = dto.toEntity(t);
@@ -47,7 +48,7 @@ public class AccountService {
 
     // 직원 계좌 정보 등록
     @Transactional
-    public void createAccountForUser(AccountDto dto) throws Exception {
+    public void createAccountForUser(AccountDto dto) {
         Optional<User> user = userRepository.findById(dto.getUserId());
         user.ifPresent(t -> {
             Account account = dto.toEntity(t);
@@ -57,9 +58,9 @@ public class AccountService {
 
     // 회사 계좌 정보 수정
     @Transactional
-    public void updateAccountForCompany(Long accountId, AccountDto dto) throws Exception {
+    public void updateAccountForCompany(Long accountId, AccountDto dto) {
         Optional<Account> account = accountRepository.findById(accountId);
-        if (account.isEmpty()) throw new Exception("존재하지 않는 계좌입니다.");
+        if (account.isEmpty()) throw new CustomIllegalStateExceptionHandler("존재하지 않는 계좌입니다.");
         account.ifPresent(t -> {
             t.setAccountNumber(dto.getAccountNumber());
             t.setNameOfBank(dto.getNameOfBank());
@@ -74,9 +75,9 @@ public class AccountService {
 
     // 직원 계좌 정보 수정
     @Transactional
-    public void updateAccountForUser(Long accountId, AccountDto dto) throws Exception {
+    public void updateAccountForUser(Long accountId, AccountDto dto) {
         Optional<Account> account = accountRepository.findById(accountId);
-        if (account.isEmpty()) throw new Exception("존재하지 않는 계좌입니다.");
+        if (account.isEmpty()) throw new CustomIllegalStateExceptionHandler("존재하지 않는 계좌입니다.");
         account.ifPresent(t -> {
             t.setAccountNumber(dto.getAccountNumber());
             t.setNameOfBank(dto.getNameOfBank());
@@ -91,9 +92,9 @@ public class AccountService {
 
     // 계좌 정보 삭제
     @Transactional
-    public void deleteAccount(Long accountId) throws Exception {
+    public void deleteAccount(Long accountId) {
         Optional<Account> account = accountRepository.findById(accountId);
-        if (account.isEmpty()) throw new Exception("존재하지 않는 계좌입니다.");
+        if (account.isEmpty()) throw new CustomIllegalStateExceptionHandler("존재하지 않는 계좌입니다.");
         account.ifPresent(accountRepository::delete);
     }
 }

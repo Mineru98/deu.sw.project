@@ -4,6 +4,7 @@ import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.User.User;
 import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.User.UserRepository;
 import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.UserAndRole.UserAndRole;
 import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.UserAndRole.UserAndRoleRepository;
+import kr.ac.deu.computer_engineering.Absenteeism.Management.handler.exception.CustomIllegalStateExceptionHandler;
 import kr.ac.deu.computer_engineering.Absenteeism.Management.route.auth.dto.AuthDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -22,7 +23,7 @@ public class AuthService {
     private final UserAndRoleRepository userAndRoleRepository;
 
     @Transactional(readOnly = true)
-    public AuthDto login(String username, String password) throws Exception {
+    public AuthDto login(String username, String password) {
         AuthDto authDto = new AuthDto();
         Long checkUsername = userRepository.countByUsername(username);
         if (checkUsername > 0) {
@@ -46,15 +47,15 @@ public class AuthService {
                     authDto.setRoleList(roleArr);
                 } else {
                     // 권한이 존재하지 않음.
-                    throw new Exception("해당 사용자의 권한이 존재하지 않습니다.");
+                    throw new CustomIllegalStateExceptionHandler("해당 사용자의 권한이 존재하지 않습니다.");
                 }
             } else {
                 // 로그인 계정은 존재하지만, 비밀번호가 틀린 경우
-                throw new Exception("계정과 비밀번호를 다시 확인해주세요.");
+                throw new CustomIllegalStateExceptionHandler("계정과 비밀번호를 다시 확인해주세요.");
             }
         } else {
             // 로그인 계정이 존재하지 않는 경우
-            throw new Exception("계정과 비밀번호를 다시 확인해주세요.");
+            throw new CustomIllegalStateExceptionHandler("계정과 비밀번호를 다시 확인해주세요.");
         }
         return authDto;
     }

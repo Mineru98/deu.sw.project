@@ -4,7 +4,6 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.User.User;
 import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.User.dto.UserDto;
-import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.User.dto.UserDto;
 import kr.ac.deu.computer_engineering.Absenteeism.Management.service.user.UserService;
 import kr.ac.deu.computer_engineering.Absenteeism.Management.utils.RoleValidate;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +18,6 @@ import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 @Slf4j
 @RestController
@@ -52,7 +50,7 @@ public class UserController {
     @GetMapping("/{userId}")
     public ResponseEntity<?> getItemById(
             HttpServletRequest request,
-            @PathVariable Long userId) throws Exception {
+            @PathVariable Long userId) {
         HttpSession session = request.getSession();
         Long sUserId = RoleValidate.getUserId(session);
         if (Objects.equals(sUserId, userId) || RoleValidate.isRoleCeo(session) || RoleValidate.isRoleManager(session)) {
@@ -71,7 +69,7 @@ public class UserController {
     public ResponseEntity<?> createItem(
             HttpServletRequest request,
             @Valid @RequestBody UserDto dto,
-            BindingResult bindingResult) throws Exception {
+            BindingResult bindingResult) {
         HttpSession session = request.getSession();
         if (RoleValidate.isRoleCeo(session) || RoleValidate.isRoleManager(session)) {
             userService.createUser(dto);
@@ -90,7 +88,7 @@ public class UserController {
             HttpServletRequest request,
             @Valid @RequestBody UserDto dto,
             BindingResult bindingResult,
-            @PathVariable Long userId) throws Exception {
+            @PathVariable Long userId) {
         HttpSession session = request.getSession();
         Long sUserId = RoleValidate.getUserId(session);
         if (Objects.equals(sUserId, userId) || RoleValidate.isRoleCeo(session) || RoleValidate.isRoleManager(session)) {
@@ -108,7 +106,7 @@ public class UserController {
     @DeleteMapping("/{userId}")
     public ResponseEntity<?> deleteItemById(
             HttpServletRequest request,
-            @PathVariable Long userId) throws Exception {
+            @PathVariable Long userId) {
         HttpSession session = request.getSession();
         if (RoleValidate.isRoleCeo(session) || RoleValidate.isRoleManager(session)) {
             userService.deleteUser(userId);

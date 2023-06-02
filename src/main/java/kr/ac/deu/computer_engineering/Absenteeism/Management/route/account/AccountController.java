@@ -34,7 +34,7 @@ public class AccountController {
             summary = "계좌 Id로 상세 조회",
             description = "계좌 상세 조회")
     @GetMapping("/{accountId}")
-    public ResponseEntity<?> getItemById(@PathVariable Long accountId) throws Exception {
+    public ResponseEntity<?> getItemById(@PathVariable Long accountId) {
         Account account = accountService.getAccountById(accountId);
         return new ResponseEntity<>(account, HttpStatus.OK);
     }
@@ -44,7 +44,7 @@ public class AccountController {
             summary = "계좌 정보 생성(직원)",
             description = "계좌 정보 생성(직원)")
     @PostMapping("/user")
-    public ResponseEntity<?> createItemForUser(@RequestBody AccountDto dto) throws Exception {
+    public ResponseEntity<?> createItemForUser(@RequestBody AccountDto dto) {
         accountService.createAccountForUser(dto);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
@@ -54,7 +54,7 @@ public class AccountController {
             summary = "계좌 정보 생성(회사)",
             description = "계좌 정보 생성(회사)")
     @PostMapping("/company")
-    public ResponseEntity<?> createItemForCompany(@RequestBody AccountDto dto) throws Exception {
+    public ResponseEntity<?> createItemForCompany(@RequestBody AccountDto dto) {
         accountService.createAccountForCompany(dto);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
@@ -64,7 +64,7 @@ public class AccountController {
             summary = "계좌 Id로 계좌 정보 수정",
             description = "계좌 정보 수정")
     @PutMapping("/user/{accountId}")
-    public ResponseEntity<?> updateItemForUserById(@PathVariable Long accountId, @RequestBody AccountDto dto) throws Exception {
+    public ResponseEntity<?> updateItemForUserById(@PathVariable Long accountId, @RequestBody AccountDto dto) {
         accountService.updateAccountForUser(accountId, dto);
         return new ResponseEntity<>(HttpStatus.OK);
     }
@@ -74,7 +74,7 @@ public class AccountController {
             summary = "계좌 Id로 계좌 정보 수정",
             description = "계좌 정보 수정")
     @PutMapping("/company/{accountId}")
-    public ResponseEntity<?> updateItemForCompanyById(@PathVariable Long accountId, @RequestBody AccountDto dto) throws Exception {
+    public ResponseEntity<?> updateItemForCompanyById(@PathVariable Long accountId, @RequestBody AccountDto dto) {
         accountService.updateAccountForCompany(accountId, dto);
         return new ResponseEntity<>(HttpStatus.OK);
     }
@@ -84,7 +84,7 @@ public class AccountController {
             summary = "계좌 Id로 계좌 정보 삭제",
             description = "계좌 정보 삭제")
     @DeleteMapping("/{accountId}")
-    public ResponseEntity<?> deleteItemById(@PathVariable Long accountId) throws Exception {
+    public ResponseEntity<?> deleteItemById(@PathVariable Long accountId) {
         accountService.deleteAccount(accountId);
         return new ResponseEntity<>(HttpStatus.OK);
     }

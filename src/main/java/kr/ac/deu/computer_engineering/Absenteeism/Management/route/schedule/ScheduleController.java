@@ -30,7 +30,7 @@ public class ScheduleController {
             @RequestParam(required = true) Long userId,
             @RequestParam(required = false) LocalDate beginDate,
             @RequestParam(required = false) LocalDate endDate
-    ) throws Exception {
+    ) {
         List<Schedule> result = scheduleService.getList(userId, beginDate, endDate);
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
@@ -40,7 +40,7 @@ public class ScheduleController {
             summary = "일정 Id로 상세 조회",
             description = "일정 상세 조회")
     @GetMapping("/{scheduleId}")
-    public ResponseEntity<?> getItemById(@PathVariable Long scheduleId) throws Exception {
+    public ResponseEntity<?> getItemById(@PathVariable Long scheduleId) {
         Schedule schedule = scheduleService.getSchduleById(scheduleId);
         return new ResponseEntity<>(schedule, HttpStatus.OK);
     }
@@ -50,7 +50,7 @@ public class ScheduleController {
             summary = "일정 정보 생성",
             description = "일정 정보 생성")
     @PostMapping("")
-    public ResponseEntity<?> createItem(@RequestBody ScheduleDto dto) throws Exception {
+    public ResponseEntity<?> createItem(@RequestBody ScheduleDto dto) {
         scheduleService.createSchedule(dto);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
@@ -63,7 +63,7 @@ public class ScheduleController {
     public ResponseEntity<?> updateItemById(
             @PathVariable Long scheduleId,
             @RequestBody ScheduleDto dto
-    ) throws Exception {
+    ) {
         scheduleService.updateSchedule(scheduleId, dto);
         return new ResponseEntity<>(HttpStatus.OK);
     }
@@ -73,7 +73,7 @@ public class ScheduleController {
             summary = "일정 Id로 일정 승인",
             description = "일정 승인")
     @PutMapping("/{scheduleId}/approve")
-    public ResponseEntity<?> updateItemApproveById(@PathVariable Long scheduleId, @RequestBody ScheduleDto dto) throws Exception {
+    public ResponseEntity<?> updateItemApproveById(@PathVariable Long scheduleId, @RequestBody ScheduleDto dto) {
         scheduleService.approveSchedule(scheduleId, dto);
         return new ResponseEntity<>(HttpStatus.OK);
     }
@@ -83,7 +83,7 @@ public class ScheduleController {
             summary = "일정 Id로 일정 정보 삭제",
             description = "일정 정보 삭제")
     @DeleteMapping("/{scheduleId}")
-    public ResponseEntity<?> deleteItemById(@PathVariable Long scheduleId) throws Exception {
+    public ResponseEntity<?> deleteItemById(@PathVariable Long scheduleId) {
         scheduleService.deleteSchedule(scheduleId);
         return new ResponseEntity<>(HttpStatus.OK);
     }

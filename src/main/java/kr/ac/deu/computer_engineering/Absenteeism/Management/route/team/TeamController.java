@@ -34,7 +34,7 @@ public class TeamController {
             summary = "부서 Id로 상세 조회",
             description = "부서 상세 조회")
     @GetMapping("/{teamId}")
-    public ResponseEntity<?> getItemById(@PathVariable Long teamId) throws Exception {
+    public ResponseEntity<?> getItemById(@PathVariable Long teamId) {
         Team team = teamService.getTeamById(teamId);
         return new ResponseEntity<>(team, HttpStatus.OK);
     }
@@ -46,7 +46,7 @@ public class TeamController {
     @PostMapping("")
     public ResponseEntity<?> createItem(
             @RequestBody TeamDto dto
-    ) throws Exception {
+    ) {
         teamService.createTeam(dto);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
@@ -58,7 +58,7 @@ public class TeamController {
     @PutMapping("/{teamId}")
     public ResponseEntity<?> updateItemById(
             @PathVariable Long teamId,
-            @RequestBody TeamDto dto) throws Exception {
+            @RequestBody TeamDto dto) {
         teamService.updateTeam(teamId, dto);
         return new ResponseEntity<>(HttpStatus.OK);
     }
@@ -68,7 +68,7 @@ public class TeamController {
             summary = "부서 Id로 부서 정보 삭제",
             description = "부서 정보 삭제")
     @DeleteMapping("/{teamId}")
-    public ResponseEntity<?> deleteItemById(@PathVariable Long teamId) throws Exception {
+    public ResponseEntity<?> deleteItemById(@PathVariable Long teamId) {
         teamService.deleteTeam(teamId);
         return new ResponseEntity<>(HttpStatus.OK);
     }

@@ -9,6 +9,7 @@ import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.Team.TeamRep
 import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.User.User;
 import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.User.UserRepository;
 import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.User.dto.UserDto;
+import kr.ac.deu.computer_engineering.Absenteeism.Management.handler.exception.CustomIllegalStateExceptionHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,30 +33,30 @@ public class UserService {
 
     // 직원 상세 조회
     @Transactional(readOnly = true)
-    public User getUserById(Long userId) throws Exception {
+    public User getUserById(Long userId) {
         Optional<User> user = userRepository.findById(userId);
-        if (user.isEmpty()) throw new Exception("존재하지 않는 직원입니다.");
+        if (user.isEmpty()) throw new CustomIllegalStateExceptionHandler("존재하지 않는 직원입니다.");
         return user.get();
     }
 
     // 직원 등록
     @Transactional
-    public void createUser(UserDto dto) throws Exception {
+    public void createUser(UserDto dto) {
         Optional<Company> company = companyRepository.findById(dto.getRankId());
-        if (company.isEmpty()) throw new Exception("존재하지 않는 회사입니다.");
+        if (company.isEmpty()) throw new CustomIllegalStateExceptionHandler("존재하지 않는 회사입니다.");
         Optional<Team> team = teamRepository.findById(dto.getRankId());
-        if (team.isEmpty()) throw new Exception("존재하지 않는 부서입니다.");
+        if (team.isEmpty()) throw new CustomIllegalStateExceptionHandler("존재하지 않는 부서입니다.");
         Optional<Rank> rank = rankRepository.findById(dto.getRankId());
-        if (rank.isEmpty()) throw new Exception("존재하지 않는 직급입니다.");
+        if (rank.isEmpty()) throw new CustomIllegalStateExceptionHandler("존재하지 않는 직급입니다.");
         User user = dto.toEntity(team.get(), rank.get(), company.get());
         userRepository.save(user);
     }
 
     // 직원 수정
     @Transactional
-    public void updateUser(Long userId, UserDto dto) throws Exception {
+    public void updateUser(Long userId, UserDto dto) {
         Optional<User> user = userRepository.findById(userId);
-        if (user.isEmpty()) throw new Exception("존재하지 않는 직원입니다.");
+        if (user.isEmpty()) throw new CustomIllegalStateExceptionHandler("존재하지 않는 직원입니다.");
         user.ifPresent(t -> {
             t.setUsername(dto.getUsername());
             t.setName(dto.getName());
@@ -85,9 +86,9 @@ public class UserService {
     }
 
     @Transactional
-    public void deleteUser(Long userId) throws Exception {
+    public void deleteUser(Long userId) {
         Optional<User> user = userRepository.findById(userId);
-        if (user.isEmpty()) throw new Exception("존재하지 않는 직원입니다.");
+        if (user.isEmpty()) throw new CustomIllegalStateExceptionHandler("존재하지 않는 직원입니다.");
         user.ifPresent(userRepository::delete);
     }
 }
