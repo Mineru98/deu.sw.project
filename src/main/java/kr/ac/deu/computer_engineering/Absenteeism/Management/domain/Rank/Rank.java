@@ -16,7 +16,7 @@ import java.util.Objects;
 @Getter
 @Setter
 @Entity
-@Table(name = "Rank")
+@Table(name = "`Rank`")
 public class Rank {
     @Id
     @Column(name = "id", updatable = false, nullable = false)

@@ -1,30 +1,30 @@
 SET
 foreign_key_checks = FALSE;
 
-TRUNCATE `Role`;
+TRUNCATE TABLE `Role`;
 INSERT INTO `Role` (`id`, `roleName`, `description`)
 VALUES (1, 'ROLE_CEO', '대표이사'),
        (2, 'ROLE_MANAGER', '부서관리자'),
        (3, 'ROLE_STAFF', '직원');
 
-TRUNCATE `Rank`;
+TRUNCATE TABLE `Rank`;
 INSERT INTO `Rank` (`id`, `rankName`)
 VALUES (1, '대표이사'),
        (2, '팀장'),
        (3, '사원');
 
-TRUNCATE `Company`;
+TRUNCATE TABLE `Company`;
 INSERT INTO `Company` (`id`, `companyName`, `settlementDate`, `address`, `isMain`)
 VALUES (1, '바디메이트(본사)', '2021-01-01', '', 1),
        (2, '바디메이트(부산지사)', '2021-10-01', '', 0);
 
-TRUNCATE `Team`;
+TRUNCATE TABLE `Team`;
 INSERT INTO `Team` (`id`, `teamName`)
 VALUES (1, '경영팀'),
        (2, '개발팀'),
        (3, '마케팅팀');
 
-TRUNCATE `User`;
+TRUNCATE TABLE `User`;
 INSERT INTO `User` (`id`, `username`, `password`, `name`, `birthDay`, `dateOfJoin`, `dateOfLeave`, `contactNumber`,
                     `networkMacAddress`, `isManager`, `isOfficer`, `companyId`, `teamId`, `rankId`)
 VALUES (1, 'user1',
@@ -52,7 +52,7 @@ VALUES (1, 'user1',
         'daa7f4d0512d94d07b875e8d9842b818079cd71a13c82b5b36a287bc7230a3e249807a7ec75d06a2bcdb175d926d5dcc5cefa67e5534285ceb10c307c84931e1',
         '박경리', '1988-05-13', '2021-12-23', null, '01012341234', '2c-6d-26-06-9f-4d', FALSE, True, 1, 2, 3);
 
-TRUNCATE `UserAndRole`;
+TRUNCATE TABLE `UserAndRole`;
 INSERT INTO `UserAndRole` (id, userId, roleId)
 VALUES (1, 1, 1),
        (2, 2, 2),
@@ -65,6 +65,6 @@ VALUES (1, 1, 1),
        (9, 7, 3),
        (10, 8, 3);
 
-TRUNCATE `HealthCheckHistory`;
+TRUNCATE TABLE `HealthCheckHistory`;
 SET
 foreign_key_checks = TRUE;
