@@ -36,6 +36,7 @@ public class AuthController {
         AuthDto auth = authService.login(dto.getUsername(), dto.getPassword());
         HttpSession session = request.getSession();
         session.setAttribute("userId", auth.getUserId());
+        session.setAttribute("teamId", auth.getTeamId());
         session.setAttribute("roleList", auth.getRoleList());
         return new ResponseEntity<>(new ResponseDTO<>(ResState.OK, auth), HttpStatus.OK);
     }

@@ -8,7 +8,7 @@ import java.util.Optional;
 public interface RankRepository extends JpaRepository<Rank, Long> {
     Long countByRankName(String rankName);
 
-    List<Rank> findAllByIdNotIn(List<Long> id);
+    <T> List<T> findAllByIdNotIn(List<Long> id, Class<T> type);
 
-    Optional<Rank> findById(Long id);
+    <T> Optional<T> findById(Long id, Class<T> type);
 }

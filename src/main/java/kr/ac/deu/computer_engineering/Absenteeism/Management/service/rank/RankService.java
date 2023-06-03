@@ -3,6 +3,7 @@ package kr.ac.deu.computer_engineering.Absenteeism.Management.service.rank;
 import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.Rank.Rank;
 import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.Rank.RankRepository;
 import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.Rank.dto.RankDto;
+import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.Rank.dto.RankMapping;
 import kr.ac.deu.computer_engineering.Absenteeism.Management.handler.exception.CustomIllegalStateExceptionHandler;
 import kr.ac.deu.computer_engineering.Absenteeism.Management.utils.RoleValidate;
 import lombok.RequiredArgsConstructor;
@@ -21,25 +22,25 @@ public class RankService {
 
     // 직급 정보 목록 조회
     @Transactional(readOnly = true)
-    public List<Rank> getList(HttpSession session) {
+    public List<RankMapping> getList(HttpSession session) {
         List<Long> idList = new ArrayList<Long>();
         if (RoleValidate.isRoleCeo(session)) {
             // 대표이사 직급 ID가 1이기 때문에 대표이사 권한으로 접근 시 직급 중 대표이사 직급을 제외한 모든 직급 정보를 조회하도록 한다.
             idList.add(1L);
-            return rankRepository.findAllByIdNotIn(idList);
+            return rankRepository.findAllByIdNotIn(idList, RankMapping.class);
         } else if (RoleValidate.isRoleManager(session)) {
             // 대표이사 직급 ID가 1이고, 부서장 직급 ID가 2이기 때문에 부서장 권한으로 접근 시 직급 중 대표이사와 부서장 직급을 제외한 모든 직급 정보를 조회하도록 한다.
             idList.add(1L);
             idList.add(2L);
-            return rankRepository.findAllByIdNotIn(idList);
+            return rankRepository.findAllByIdNotIn(idList, RankMapping.class);
         }
         return null;
     }
 
     // 직급 정보 상세 조회
     @Transactional(readOnly = true)
-    public Rank getRankById(Long rankId) {
-        Optional<Rank> rank = rankRepository.findById(rankId);
+    public RankMapping getRankById(Long rankId) {
+        Optional<RankMapping> rank = rankRepository.findById(rankId, RankMapping.class);
         if (rank.isEmpty()) throw new CustomIllegalStateExceptionHandler("존재하지 않는 직급입니다.");
         return rank.get();
     }

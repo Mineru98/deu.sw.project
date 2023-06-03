@@ -15,8 +15,6 @@ public interface UserMapping {
 
     String getContactNumber();
 
-    void setContactNumber(String contactNumber);
-
     Boolean getIsManager();
 
     Boolean getIsOfficer();

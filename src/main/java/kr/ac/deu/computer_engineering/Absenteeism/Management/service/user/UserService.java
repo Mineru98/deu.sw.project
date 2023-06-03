@@ -62,8 +62,6 @@ public class UserService {
     public UserMapping getUserById(Long userId) {
         Optional<UserMapping> user = userRepository.findById(userId, UserMapping.class);
         if (user.isEmpty()) throw new CustomIllegalStateExceptionHandler("존재하지 않는 직원입니다.");
-        String contactNumber = Formatter.convertPhoneNumber(user.get().getContactNumber());
-        user.get().setContactNumber(contactNumber);
         return user.get();
     }
 
@@ -73,7 +71,7 @@ public class UserService {
         Optional<Company> company = companyRepository.findById(dto.getCompanyId());
         if (company.isEmpty()) throw new CustomIllegalStateExceptionHandler("존재하지 않는 회사입니다.");
         if (RoleValidate.isRoleManager(session)) {
-            if (!Objects.equals(dto.getTeamId(), RoleValidate.getTeamId(session))) {
+            if (dto.getTeamId() != RoleValidate.getTeamId(session)) {
                 throw new CustomIllegalStateExceptionHandler("다른 부서의 직원을 등록할 수 없습니다.");
             }
         }
@@ -162,33 +160,31 @@ public class UserService {
             }
 
             if (dto.getRankId() != null) {
-                if (t.getRank().getId() != 1L) {
-                    Optional<Rank> rank = rankRepository.findById(dto.getRankId());
-                    rank.ifPresent(t::setRank);
-                } else {
-                    throw new CustomIllegalStateExceptionHandler("대표이사의 직급은 변경할 수 없습니다.");
-                }
+                Optional<Rank> rank = rankRepository.findById(dto.getRankId());
+                rank.ifPresent(t::setRank);
             }
             userRepository.save(t);
 
-            userAndRoleRepository.deleteAllByUserId(t.getId());
-            List<UserAndRole> uar = new ArrayList<>();
-            for(Long roleId: dto.getRoleIdList()) {
-                UserAndRole item = new UserAndRole();
-                item.setUser(t);
-                if (t.getRank().getId() != 1L && roleId != 1L) {
-                    Optional<Role> role = roleRepository.findById(roleId);
-                    if (role.isPresent()) {
-                        item.setRole(role.get());
-                        uar.add(item);
+            if (t.getRank().getId() != 1L) {
+                userAndRoleRepository.deleteAllByUserId(t.getId());
+                List<UserAndRole> uar = new ArrayList<>();
+                for(Long roleId: dto.getRoleIdList()) {
+                    UserAndRole item = new UserAndRole();
+                    item.setUser(t);
+                    if (t.getRank().getId() != 1L && roleId != 1L) {
+                        Optional<Role> role = roleRepository.findById(roleId);
+                        if (role.isPresent()) {
+                            item.setRole(role.get());
+                            uar.add(item);
+                        } else {
+                            throw new CustomIllegalStateExceptionHandler("시스템 권한을 등록하는 과정에서 문제가 발생했습니다.");
+                        }
                     } else {
-                        throw new CustomIllegalStateExceptionHandler("시스템 권한을 등록하는 과정에서 문제가 발생했습니다.");
+                        throw new CustomIllegalStateExceptionHandler("대표이사 시스템권한은 설정할 수 없습니다.");
                     }
-                } else {
-                    throw new CustomIllegalStateExceptionHandler("대표이사 시스템권한은 설정할 수 없습니다.");
                 }
+                userAndRoleRepository.saveAll(uar);
             }
-            userAndRoleRepository.saveAll(uar);
         });
     }
 

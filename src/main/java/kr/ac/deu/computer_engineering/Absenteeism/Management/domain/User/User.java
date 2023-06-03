@@ -59,7 +59,7 @@ public class User {
     private LocalDate birthDay;
 
     @Comment("전화번호")
-    @Column(length = 12)
+    @Column(length = 16)
     private String contactNumber;
 
     @Comment("네트워크 MAC 주소")

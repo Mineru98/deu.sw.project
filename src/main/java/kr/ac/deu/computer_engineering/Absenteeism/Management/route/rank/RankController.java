@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.Rank.Rank;
 import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.Rank.dto.RankDto;
+import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.Rank.dto.RankMapping;
 import kr.ac.deu.computer_engineering.Absenteeism.Management.enums.ResState;
 import kr.ac.deu.computer_engineering.Absenteeism.Management.handler.exception.ResponseDTO;
 import kr.ac.deu.computer_engineering.Absenteeism.Management.service.rank.RankService;
@@ -31,7 +32,7 @@ public class RankController {
     public ResponseEntity<?> getItemList(HttpServletRequest request) {
         HttpSession session = request.getSession();
         if (RoleValidate.isRoleCeo(session) || RoleValidate.isRoleManager(session)) {
-            List<Rank> result = rankService.getList(session);
+            List<RankMapping> result = rankService.getList(session);
             return new ResponseEntity<>(new ResponseDTO<>(ResState.OK, result), HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
@@ -45,7 +46,7 @@ public class RankController {
             @PathVariable Long rankId) {
         HttpSession session = request.getSession();
         if (RoleValidate.isRoleCeo(session) || RoleValidate.isRoleManager(session)) {
-            Rank result = rankService.getRankById(rankId);
+            RankMapping result = rankService.getRankById(rankId);
             return new ResponseEntity<>(new ResponseDTO<>(ResState.OK, result), HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
