@@ -5,13 +5,18 @@ import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.HealthCheckH
 import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.User.User;
 import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.User.UserRepository;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
+import java.util.Set;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Component
 @AllArgsConstructor
 public class JobService {
@@ -24,24 +29,31 @@ public class JobService {
 
     }
 
+//    @Scheduled(cron = "*/10 * * * * *")
     @Scheduled(cron = "0 0 0 * * *")
     public void calcHealthCheckHistory() {
+        log.info("SCHEDULER START");
         Integer currentYear = LocalDate.now().getYear();
-        List<User> userList = userRepository.findAllByDateOfLeaveIsNull();
-        List<HealthCheckHistory> histories = healthCheckHistoryRepository.findAllByUserNotInAndApplyYear(userList, currentYear);
-        List<User> users = histories.stream().map(HealthCheckHistory::getUser).collect(Collectors.toList());
-        for (User user: users) {
-            HealthCheckHistory healthCheck = new HealthCheckHistory();
-            healthCheck.setIsVerified(false);
-            healthCheck.setIsCompleted(false);
-            if (user.getIsOfficer()) {
-                if ((currentYear % 2 == (user.getBirthDay().getYear() % 2))) {
+        LocalDate oneYearAgo = LocalDate.now().minusYears(1);
+        List<User> userList = userRepository.findAllByDateOfLeaveIsNullAndDateOfJoinIsNotNullAndDateOfJoinBefore(oneYearAgo);
+        List<HealthCheckHistory> histories = healthCheckHistoryRepository.findAllByUserInAndApplyYear(userList, currentYear);
+        List<User> historyUserList = histories.stream().map(HealthCheckHistory::getUser).collect(Collectors.toList());
+        userList.removeIf(user -> historyUserList.stream().anyMatch(historyUser -> Objects.equals(historyUser.getId(), user.getId())));
+        if (userList.size() > 0) {
+            for (User user: userList) {
+                HealthCheckHistory healthCheck = new HealthCheckHistory();
+                healthCheck.setUser(user);
+                healthCheck.setIsVerified(false);
+                healthCheck.setIsCompleted(false);
+                if (user.getIsOfficer()) {
+                    if ((currentYear % 2 == (user.getBirthDay().getYear() % 2))) {
+                        healthCheck.setApplyYear(currentYear);
+                        healthCheckHistoryRepository.save(healthCheck);
+                    }
+                } else {
                     healthCheck.setApplyYear(currentYear);
                     healthCheckHistoryRepository.save(healthCheck);
                 }
-            } else {
-                healthCheck.setApplyYear(currentYear);
-                healthCheckHistoryRepository.save(healthCheck);
             }
         }
     }

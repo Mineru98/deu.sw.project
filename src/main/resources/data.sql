@@ -65,5 +65,6 @@ VALUES (1, 1, 1),
        (9, 7, 3),
        (10, 8, 3);
 
+TRUNCATE `HealthCheckHistory`;
 SET
 foreign_key_checks = TRUE;
