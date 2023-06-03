@@ -37,7 +37,7 @@ public class UserController {
             @RequestParam(required = false) String q) {
         HttpSession session = request.getSession();
         if (RoleValidate.isRoleCeo(session) || RoleValidate.isRoleManager(session)) {
-            List<UserMapping> userList = userService.getList(q);
+            List<UserMapping> userList = userService.getList(q, session);
             return new ResponseEntity<>(userList, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
@@ -53,8 +53,7 @@ public class UserController {
             HttpServletRequest request,
             @PathVariable Long userId) {
         HttpSession session = request.getSession();
-        Long sUserId = RoleValidate.getUserId(session);
-        if (Objects.equals(sUserId, userId) || RoleValidate.isRoleCeo(session) || RoleValidate.isRoleManager(session)) {
+        if (Objects.equals(RoleValidate.getUserId(session), userId) || RoleValidate.isRoleCeo(session) || RoleValidate.isRoleManager(session)) {
             UserMapping user = userService.getUserById(userId);
             return new ResponseEntity<>(user, HttpStatus.OK);
         } else {
@@ -73,7 +72,7 @@ public class UserController {
             BindingResult bindingResult) {
         HttpSession session = request.getSession();
         if (RoleValidate.isRoleCeo(session) || RoleValidate.isRoleManager(session)) {
-            userService.createUser(dto);
+            userService.createUser(dto, session);
             return new ResponseEntity<>(HttpStatus.CREATED);
         } else {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
@@ -88,12 +87,12 @@ public class UserController {
     public ResponseEntity<?> updateItemById(
             HttpServletRequest request,
             @Valid @RequestBody UserDto dto,
-            BindingResult bindingResult,
-            @PathVariable Long userId) {
+            @PathVariable Long userId,
+            BindingResult bindingResult) {
         HttpSession session = request.getSession();
         Long sUserId = RoleValidate.getUserId(session);
         if (Objects.equals(sUserId, userId) || RoleValidate.isRoleCeo(session) || RoleValidate.isRoleManager(session)) {
-            userService.updateUser(userId, dto);
+            userService.updateUser(userId, dto, session);
             return new ResponseEntity<>(HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
@@ -110,7 +109,7 @@ public class UserController {
             @PathVariable Long userId) {
         HttpSession session = request.getSession();
         if (RoleValidate.isRoleCeo(session) || RoleValidate.isRoleManager(session)) {
-            userService.deleteUser(userId);
+            userService.deleteUser(userId, session);
             return new ResponseEntity<>(HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);

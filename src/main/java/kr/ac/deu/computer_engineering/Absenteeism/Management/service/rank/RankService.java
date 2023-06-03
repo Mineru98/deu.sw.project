@@ -24,12 +24,14 @@ public class RankService {
     public List<Rank> getList(HttpSession session) {
         List<Long> idList = new ArrayList<Long>();
         if (RoleValidate.isRoleCeo(session)) {
-            idList.add(2L);
-            idList.add(3L);
-            return rankRepository.findAllByIdIn(idList);
+            // 대표이사 직급 ID가 1이기 때문에 대표이사 권한으로 접근 시 직급 중 대표이사 직급을 제외한 모든 직급 정보를 조회하도록 한다.
+            idList.add(1L);
+            return rankRepository.findAllByIdNotIn(idList);
         } else if (RoleValidate.isRoleManager(session)) {
-            idList.add(3L);
-            return rankRepository.findAllByIdIn(idList);
+            // 대표이사 직급 ID가 1이고, 부서장 직급 ID가 2이기 때문에 부서장 권한으로 접근 시 직급 중 대표이사와 부서장 직급을 제외한 모든 직급 정보를 조회하도록 한다.
+            idList.add(1L);
+            idList.add(2L);
+            return rankRepository.findAllByIdNotIn(idList);
         }
         return null;
     }
@@ -46,6 +48,8 @@ public class RankService {
     @Transactional
     public void createRank(RankDto dto) {
         Rank rank = dto.toEntity();
+        Long checkSum = rankRepository.countByRankName(dto.getRankName());
+        if (checkSum > 0) throw new CustomIllegalStateExceptionHandler("이미 존재하는 직급명입니다.");
         rankRepository.save(rank);
     }
 
@@ -53,7 +57,7 @@ public class RankService {
     @Transactional
     public void updateRank(Long rankId, RankDto dto) {
         Optional<Rank> rank = rankRepository.findById(rankId);
-        if (rank.isEmpty()) throw new CustomIllegalStateExceptionHandler("존재하지 않는 부서입니다.");
+        if (rank.isEmpty()) throw new CustomIllegalStateExceptionHandler("존재하지 않는 직급입니다.");
         rank.ifPresent(t -> {
             t.setRankName(dto.getRankName());
             rankRepository.save(t);
