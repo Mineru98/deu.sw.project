@@ -2,13 +2,11 @@ package kr.ac.deu.computer_engineering.Absenteeism.Management.route.rank;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.Company.Company;
-import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.Company.dto.CompanyDto;
 import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.Rank.Rank;
 import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.Rank.dto.RankDto;
-import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.Rank.dto.RankDto;
+import kr.ac.deu.computer_engineering.Absenteeism.Management.enums.ResState;
+import kr.ac.deu.computer_engineering.Absenteeism.Management.handler.exception.ResponseDTO;
 import kr.ac.deu.computer_engineering.Absenteeism.Management.service.rank.RankService;
-import kr.ac.deu.computer_engineering.Absenteeism.Management.service.team.TeamService;
 import kr.ac.deu.computer_engineering.Absenteeism.Management.utils.RoleValidate;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -34,7 +32,7 @@ public class RankController {
         HttpSession session = request.getSession();
         if (RoleValidate.isRoleCeo(session) || RoleValidate.isRoleManager(session)) {
             List<Rank> result = rankService.getList(session);
-            return new ResponseEntity<>(result, HttpStatus.OK);
+            return new ResponseEntity<>(new ResponseDTO<>(ResState.OK, result), HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
@@ -47,8 +45,8 @@ public class RankController {
             @PathVariable Long rankId) {
         HttpSession session = request.getSession();
         if (RoleValidate.isRoleCeo(session) || RoleValidate.isRoleManager(session)) {
-            Rank rank = rankService.getRankById(rankId);
-            return new ResponseEntity<>(rank, HttpStatus.OK);
+            Rank result = rankService.getRankById(rankId);
+            return new ResponseEntity<>(new ResponseDTO<>(ResState.OK, result), HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
@@ -63,7 +61,7 @@ public class RankController {
         HttpSession session = request.getSession();
         if (RoleValidate.isRoleCeo(session) || RoleValidate.isRoleManager(session)) {
             rankService.createRank(dto);
-            return new ResponseEntity<>(HttpStatus.CREATED);
+            return new ResponseEntity<>(new ResponseDTO<>(ResState.CREATED), HttpStatus.CREATED);
         }
         return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
@@ -78,7 +76,7 @@ public class RankController {
         HttpSession session = request.getSession();
         if (RoleValidate.isRoleCeo(session) || RoleValidate.isRoleManager(session)) {
             rankService.updateRank(rankId, dto);
-            return new ResponseEntity<>(HttpStatus.OK);
+            return new ResponseEntity<>(new ResponseDTO<>(ResState.OK), HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
@@ -92,7 +90,7 @@ public class RankController {
         HttpSession session = request.getSession();
         if (RoleValidate.isRoleCeo(session) || RoleValidate.isRoleManager(session)) {
             rankService.deleteRank(rankId);
-            return new ResponseEntity<>(HttpStatus.OK);
+            return new ResponseEntity<>(new ResponseDTO<>(ResState.OK), HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }

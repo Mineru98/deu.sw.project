@@ -2,6 +2,8 @@ package kr.ac.deu.computer_engineering.Absenteeism.Management.route.auth;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import kr.ac.deu.computer_engineering.Absenteeism.Management.enums.ResState;
+import kr.ac.deu.computer_engineering.Absenteeism.Management.handler.exception.ResponseDTO;
 import kr.ac.deu.computer_engineering.Absenteeism.Management.route.auth.dto.AuthDto;
 import kr.ac.deu.computer_engineering.Absenteeism.Management.route.auth.dto.LoginDto;
 import kr.ac.deu.computer_engineering.Absenteeism.Management.service.auth.AuthService;
@@ -35,7 +37,7 @@ public class AuthController {
         HttpSession session = request.getSession();
         session.setAttribute("userId", auth.getUserId());
         session.setAttribute("roleList", auth.getRoleList());
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(new ResponseDTO<>(ResState.OK), HttpStatus.OK);
     }
 
     @Tag(name = "인증")
@@ -46,6 +48,6 @@ public class AuthController {
     public ResponseEntity<?> logout(HttpServletRequest request) {
         HttpSession session = request.getSession();
         session.invalidate();
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(new ResponseDTO<>(ResState.OK), HttpStatus.OK);
     }
 }

@@ -24,7 +24,7 @@ public class AllowanceService {
     public List<AllowanceOfRank> getList(Long rankId) {
         Optional<Rank> rank = rankRepository.findById(rankId);
         if (rank.isPresent()) {
-            return allowanceOfRankRepository.findAllByRank(rank.get());
+            return allowanceOfRankRepository.findAllByRank(rank.get(), AllowanceOfRank.class);
         } else {
             throw new CustomIllegalStateExceptionHandler("존재하지 않는 직급별 수당입니다.");
         }
@@ -32,8 +32,8 @@ public class AllowanceService {
 
     // 직급별 수당 정보 상세 조회
     @Transactional(readOnly = true)
-    public AllowanceOfRank getAccountById(Long accountId) {
-        Optional<AllowanceOfRank> account = allowanceOfRankRepository.findById(accountId);
+    public AllowanceOfRank getAccountByRankIdAndId(Long rankId, Long accountId) {
+        Optional<AllowanceOfRank> account = allowanceOfRankRepository.findByRankIdAndId(rankId, accountId, AllowanceOfRank.class);
         if (account.isEmpty()) throw new CustomIllegalStateExceptionHandler("존재하지 않는 직급별 수당입니다.");
         return account.get();
     }
@@ -48,11 +48,10 @@ public class AllowanceService {
         });
     }
 
-
     // 직급별 수당 정보 수정
     @Transactional
-    public void updateAllowanceOfRank(Long id, AllowanceOfRankDto dto) {
-        Optional<AllowanceOfRank> allowanceOfRank = allowanceOfRankRepository.findById(id);
+    public void updateAllowanceOfRank( Long accountId, AllowanceOfRankDto dto) {
+        Optional<AllowanceOfRank> allowanceOfRank = allowanceOfRankRepository.findById(accountId, AllowanceOfRank.class);
         if (allowanceOfRank.isEmpty()) throw new CustomIllegalStateExceptionHandler("존재하지 않는 직급별 수당입니다.");
         allowanceOfRank.ifPresent(t -> {
             t.setAmount(dto.getAmount());
@@ -68,8 +67,8 @@ public class AllowanceService {
 
     // 직급별 수당 정보 삭제
     @Transactional
-    public void deleteAllowanceOfRank(Long id) {
-        Optional<AllowanceOfRank> allowanceOfRank = allowanceOfRankRepository.findById(id);
+    public void deleteAllowanceOfRank(Long accountId) {
+        Optional<AllowanceOfRank> allowanceOfRank = allowanceOfRankRepository.findById(accountId, AllowanceOfRank.class);
         if (allowanceOfRank.isEmpty()) throw new CustomIllegalStateExceptionHandler("존재하지 않는 직급별 수당입니다.");
         allowanceOfRank.ifPresent(allowanceOfRankRepository::delete);
     }

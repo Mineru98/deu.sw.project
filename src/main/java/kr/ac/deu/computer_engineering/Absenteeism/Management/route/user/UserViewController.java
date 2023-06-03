@@ -10,6 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @Controller
@@ -23,8 +24,9 @@ public class UserViewController {
     public String listView(Model model, HttpServletRequest req) {
         model.addAttribute("title", "사용자 목록 페이지");
         String name = req.getParameter("name");
+        HttpSession session = req.getSession();
         // 3, 4 실행
-        List<UserMapping> userList = userService.getList(name);
+        List<UserMapping> userList = userService.getList(name, session);
         // View에게 Controller로부터
         model.addAttribute("userList", userList);
         return "user/list.html";

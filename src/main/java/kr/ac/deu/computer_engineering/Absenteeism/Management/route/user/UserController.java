@@ -2,9 +2,10 @@ package kr.ac.deu.computer_engineering.Absenteeism.Management.route.user;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.User.User;
 import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.User.dto.UserDto;
 import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.User.dto.UserMapping;
+import kr.ac.deu.computer_engineering.Absenteeism.Management.enums.ResState;
+import kr.ac.deu.computer_engineering.Absenteeism.Management.handler.exception.ResponseDTO;
 import kr.ac.deu.computer_engineering.Absenteeism.Management.service.user.UserService;
 import kr.ac.deu.computer_engineering.Absenteeism.Management.utils.RoleValidate;
 import lombok.RequiredArgsConstructor;
@@ -37,8 +38,8 @@ public class UserController {
             @RequestParam(required = false) String q) {
         HttpSession session = request.getSession();
         if (RoleValidate.isRoleCeo(session) || RoleValidate.isRoleManager(session)) {
-            List<UserMapping> userList = userService.getList(q, session);
-            return new ResponseEntity<>(userList, HttpStatus.OK);
+            List<UserMapping> result = userService.getList(q, session);
+            return new ResponseEntity<>(new ResponseDTO<>(ResState.OK, result), HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
@@ -54,8 +55,8 @@ public class UserController {
             @PathVariable Long userId) {
         HttpSession session = request.getSession();
         if (Objects.equals(RoleValidate.getUserId(session), userId) || RoleValidate.isRoleCeo(session) || RoleValidate.isRoleManager(session)) {
-            UserMapping user = userService.getUserById(userId);
-            return new ResponseEntity<>(user, HttpStatus.OK);
+            UserMapping result = userService.getUserById(userId);
+            return new ResponseEntity<>(new ResponseDTO<>(ResState.OK, result), HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
@@ -73,7 +74,7 @@ public class UserController {
         HttpSession session = request.getSession();
         if (RoleValidate.isRoleCeo(session) || RoleValidate.isRoleManager(session)) {
             userService.createUser(dto, session);
-            return new ResponseEntity<>(HttpStatus.CREATED);
+            return new ResponseEntity<>(new ResponseDTO<>(ResState.CREATED), HttpStatus.CREATED);
         } else {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
@@ -93,7 +94,7 @@ public class UserController {
         Long sUserId = RoleValidate.getUserId(session);
         if (Objects.equals(sUserId, userId) || RoleValidate.isRoleCeo(session) || RoleValidate.isRoleManager(session)) {
             userService.updateUser(userId, dto, session);
-            return new ResponseEntity<>(HttpStatus.OK);
+            return new ResponseEntity<>(new ResponseDTO<>(ResState.OK), HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
@@ -110,7 +111,7 @@ public class UserController {
         HttpSession session = request.getSession();
         if (RoleValidate.isRoleCeo(session) || RoleValidate.isRoleManager(session)) {
             userService.deleteUser(userId, session);
-            return new ResponseEntity<>(HttpStatus.OK);
+            return new ResponseEntity<>(new ResponseDTO<>(ResState.OK), HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }

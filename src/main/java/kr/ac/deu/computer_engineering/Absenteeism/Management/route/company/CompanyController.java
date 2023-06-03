@@ -2,9 +2,10 @@ package kr.ac.deu.computer_engineering.Absenteeism.Management.route.company;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.Company.Company;
 import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.Company.dto.CompanyDto;
 import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.Company.dto.CompanyMapping;
+import kr.ac.deu.computer_engineering.Absenteeism.Management.enums.ResState;
+import kr.ac.deu.computer_engineering.Absenteeism.Management.handler.exception.ResponseDTO;
 import kr.ac.deu.computer_engineering.Absenteeism.Management.service.company.CompanyService;
 import kr.ac.deu.computer_engineering.Absenteeism.Management.utils.RoleValidate;
 import lombok.RequiredArgsConstructor;
@@ -35,7 +36,7 @@ public class CompanyController {
             HttpServletRequest request,
             @RequestParam(required = false) String q) {
         List<CompanyMapping> result = companyService.getList(q);
-        return new ResponseEntity<>(result, HttpStatus.OK);
+        return new ResponseEntity<>(new ResponseDTO<>(ResState.OK, result), HttpStatus.OK);
     }
 
     @Tag(name = "회사")
@@ -48,8 +49,8 @@ public class CompanyController {
             @PathVariable Long companyId) {
         HttpSession session = request.getSession();
         if (RoleValidate.isRoleCeo(session)) {
-            CompanyMapping comp = companyService.getCompanyById(companyId);
-            return new ResponseEntity<>(comp, HttpStatus.OK);
+            CompanyMapping result = companyService.getCompanyById(companyId);
+            return new ResponseEntity<>(new ResponseDTO<>(ResState.OK, result), HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
@@ -68,7 +69,7 @@ public class CompanyController {
         HttpSession session = request.getSession();
         if (RoleValidate.isRoleCeo(session)) {
             companyService.createCompany(dto);
-            return new ResponseEntity<>(HttpStatus.CREATED);
+            return new ResponseEntity<>(new ResponseDTO<>(ResState.CREATED), HttpStatus.CREATED);
         } else {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
@@ -87,7 +88,7 @@ public class CompanyController {
         HttpSession session = request.getSession();
         if (RoleValidate.isRoleCeo(session)) {
             companyService.updateCompany(companyId, dto);
-            return new ResponseEntity<>(HttpStatus.OK);
+            return new ResponseEntity<>(new ResponseDTO<>(ResState.OK), HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
@@ -104,7 +105,7 @@ public class CompanyController {
         HttpSession session = request.getSession();
         if (RoleValidate.isRoleCeo(session)) {
             companyService.deleteCompany(companyId);
-            return new ResponseEntity<>(HttpStatus.OK);
+            return new ResponseEntity<>(new ResponseDTO<>(ResState.OK), HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
