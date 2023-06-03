@@ -37,7 +37,7 @@ public class AuthController {
         HttpSession session = request.getSession();
         session.setAttribute("userId", auth.getUserId());
         session.setAttribute("roleList", auth.getRoleList());
-        return new ResponseEntity<>(new ResponseDTO<>(ResState.OK), HttpStatus.OK);
+        return new ResponseEntity<>(new ResponseDTO<>(ResState.OK, auth), HttpStatus.OK);
     }
 
     @Tag(name = "인증")
