@@ -17,6 +17,7 @@ import java.util.stream.Collectors;
 public class JobService {
     final private UserRepository userRepository;
     final private HealthCheckHistoryRepository healthCheckHistoryRepository;
+
     @Scheduled(cron = "0 0 0 * * *")
     public void calcStatement() {
         // TODO : 급여 계산

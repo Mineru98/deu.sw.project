@@ -13,4 +13,6 @@ public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
     List<Schedule> findAllByApplyDateTime(LocalDateTime applyDateTime);
 
     void deleteAllByUserAndApplyDateTimeBetween(Long userId, LocalDateTime startDate, LocalDateTime endDate);
+
+    void deleteAllByUserId(Long userId);
 }

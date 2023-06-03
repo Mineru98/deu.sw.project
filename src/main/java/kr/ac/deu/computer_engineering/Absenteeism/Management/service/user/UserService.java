@@ -1,15 +1,23 @@
 package kr.ac.deu.computer_engineering.Absenteeism.Management.service.user;
 
+import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.Account.AccountRepository;
 import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.Company.Company;
 import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.Company.CompanyRepository;
+import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.HealthCheckHistory.HealthCheckHistoryRepository;
 import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.Rank.Rank;
 import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.Rank.RankRepository;
+import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.Role.Role;
+import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.Role.RoleRepository;
+import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.Schedule.ScheduleRepository;
+import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.Statement.StatementRepository;
 import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.Team.Team;
 import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.Team.TeamRepository;
 import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.User.User;
 import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.User.UserRepository;
 import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.User.dto.UserDto;
 import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.User.dto.UserMapping;
+import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.UserAndRole.UserAndRole;
+import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.UserAndRole.UserAndRoleRepository;
 import kr.ac.deu.computer_engineering.Absenteeism.Management.handler.exception.CustomIllegalStateExceptionHandler;
 import kr.ac.deu.computer_engineering.Absenteeism.Management.utils.Encrypt;
 import kr.ac.deu.computer_engineering.Absenteeism.Management.utils.Formatter;
@@ -19,9 +27,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -30,6 +40,12 @@ public class UserService {
     private final RankRepository rankRepository;
     private final UserRepository userRepository;
     private final CompanyRepository companyRepository;
+    private final RoleRepository roleRepository;
+    private final UserAndRoleRepository userAndRoleRepository;
+    private final AccountRepository accountRepository;
+    private final ScheduleRepository scheduleRepository;
+    private final StatementRepository statementRepository;
+    private final HealthCheckHistoryRepository healthCheckHistoryRepository;
 
     // 직원 목록 조회
     @Transactional(readOnly = true)
@@ -54,19 +70,65 @@ public class UserService {
     // 직원 등록
     @Transactional
     public void createUser(UserDto dto, HttpSession session) {
-        Optional<Company> company = companyRepository.findById(dto.getRankId());
+        Optional<Company> company = companyRepository.findById(dto.getCompanyId());
         if (company.isEmpty()) throw new CustomIllegalStateExceptionHandler("존재하지 않는 회사입니다.");
         if (RoleValidate.isRoleManager(session)) {
             if (!Objects.equals(dto.getTeamId(), RoleValidate.getTeamId(session))) {
                 throw new CustomIllegalStateExceptionHandler("다른 부서의 직원을 등록할 수 없습니다.");
             }
         }
-        Optional<Team> team = teamRepository.findById(dto.getRankId());
+        Optional<User> user = userRepository.findByUsername(dto.getUsername(), User.class);
+        if (user.isPresent()) throw new CustomIllegalStateExceptionHandler("이미 존재하는 계정입니다.");
+        Optional<Team> team = teamRepository.findById(dto.getTeamId());
         if (team.isEmpty()) throw new CustomIllegalStateExceptionHandler("존재하지 않는 부서입니다.");
         Optional<Rank> rank = rankRepository.findById(dto.getRankId());
         if (rank.isEmpty()) throw new CustomIllegalStateExceptionHandler("존재하지 않는 직급입니다.");
-        User user = dto.toEntity(team.get(), rank.get(), company.get());
-        userRepository.save(user);
+        if (dto.getRankId() == 2L) {
+            if (!checkContainsBoth(dto.getRoleIdList(), 2L, 3L)) throw new CustomIllegalStateExceptionHandler("직급이 부서관리자이면, 시스템원한은 사원과 부서장 모두 선택해야합니다.");
+        } else if (dto.getRankId() == 3L) {
+            if (dto.getRoleIdList().stream().filter(t -> !t.equals(3L)).collect(Collectors.toList()).size() > 0) throw new CustomIllegalStateExceptionHandler("직급이 사원이면, 시스템원한은 사원만 선택해야합니다.");
+        }
+        dto.setIsManager(dto.getRankId() == 2L);
+        User result = dto.toEntity(team.get(), rank.get(), company.get());
+        userRepository.save(result);
+        userAndRoleRepository.deleteAllByUserId(result.getId());
+        List<UserAndRole> uar = new ArrayList<>();
+        for(Long roleId: dto.getRoleIdList()) {
+            UserAndRole item = new UserAndRole();
+            item.setUser(result);
+            if (dto.getRankId() != 1L && roleId != 1L) {
+                Optional<Role> role = roleRepository.findById(roleId);
+                if (role.isPresent()) {
+                    item.setRole(role.get());
+                    uar.add(item);
+                } else {
+                    throw new CustomIllegalStateExceptionHandler("시스템 권한을 등록하는 과정에서 문제가 발생했습니다.");
+                }
+            } else {
+                throw new CustomIllegalStateExceptionHandler("대표이사 시스템권한은 설정할 수 없습니다.");
+            }
+        }
+        userAndRoleRepository.saveAll(uar);
+    }
+
+
+    public boolean checkContainsBoth(List<Long> numbers, Long target1, Long target2) {
+        boolean containsTarget1 = false;
+        boolean containsTarget2 = false;
+
+        for (Long number : numbers) {
+            if (number.equals(target1)) {
+                containsTarget1 = true;
+            } else if (number.equals(target2)) {
+                containsTarget2 = true;
+            }
+
+            if (containsTarget1 && containsTarget2) {
+                return true; // 둘 다 존재하면 true 반환
+            }
+        }
+
+        return false; // 둘 중 하나라도 존재하지 않으면 false 반환
     }
 
     // 직원 수정
@@ -100,10 +162,33 @@ public class UserService {
             }
 
             if (dto.getRankId() != null) {
-                Optional<Rank> rank = rankRepository.findById(dto.getRankId());
-                rank.ifPresent(t::setRank);
+                if (t.getRank().getId() != 1L) {
+                    Optional<Rank> rank = rankRepository.findById(dto.getRankId());
+                    rank.ifPresent(t::setRank);
+                } else {
+                    throw new CustomIllegalStateExceptionHandler("대표이사의 직급은 변경할 수 없습니다.");
+                }
             }
             userRepository.save(t);
+
+            userAndRoleRepository.deleteAllByUserId(t.getId());
+            List<UserAndRole> uar = new ArrayList<>();
+            for(Long roleId: dto.getRoleIdList()) {
+                UserAndRole item = new UserAndRole();
+                item.setUser(t);
+                if (t.getRank().getId() != 1L && roleId != 1L) {
+                    Optional<Role> role = roleRepository.findById(roleId);
+                    if (role.isPresent()) {
+                        item.setRole(role.get());
+                        uar.add(item);
+                    } else {
+                        throw new CustomIllegalStateExceptionHandler("시스템 권한을 등록하는 과정에서 문제가 발생했습니다.");
+                    }
+                } else {
+                    throw new CustomIllegalStateExceptionHandler("대표이사 시스템권한은 설정할 수 없습니다.");
+                }
+            }
+            userAndRoleRepository.saveAll(uar);
         });
     }
 
@@ -124,6 +209,13 @@ public class UserService {
                 throw new CustomIllegalStateExceptionHandler("대표이사는 삭제할 수 없습니다.");
             }
         }
-        user.ifPresent(userRepository::delete);
+        if (user.isPresent()) {
+            accountRepository.deleteAllByUserId(user.get().getId());
+            scheduleRepository.deleteAllByUserId(user.get().getId());
+            statementRepository.deleteAllByUserId(user.get().getId());
+            healthCheckHistoryRepository.deleteAllByUserId(user.get().getId());
+            userAndRoleRepository.deleteAllByUserId(user.get().getId());
+            userRepository.delete(user.get());
+        }
     }
 }

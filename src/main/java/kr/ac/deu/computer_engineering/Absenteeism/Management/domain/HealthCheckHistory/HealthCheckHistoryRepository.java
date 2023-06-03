@@ -7,4 +7,6 @@ import java.util.List;
 
 public interface HealthCheckHistoryRepository extends JpaRepository<HealthCheckHistory, Long> {
     List<HealthCheckHistory> findAllByUserNotInAndApplyYear(List<User> user, Integer applyYear);
+
+    void deleteAllByUserId(Long userId);
 }

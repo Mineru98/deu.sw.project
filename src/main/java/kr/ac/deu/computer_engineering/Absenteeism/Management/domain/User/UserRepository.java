@@ -10,6 +10,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     <T> List<T> findAllByNameContainingAndTeamId(String Name, Long teamId, Class<T> type);
 
+    <T> Optional<T> findByUsername(String username, Class<T> type);
+
     Long countByUsername(String username);
 
     Optional<User> findByUsernameAndPassword(String username, String password);

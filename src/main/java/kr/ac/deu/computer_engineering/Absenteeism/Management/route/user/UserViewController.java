@@ -1,8 +1,6 @@
 package kr.ac.deu.computer_engineering.Absenteeism.Management.route.user;
 
-import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.User.User;
 import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.User.dto.UserMapping;
-import kr.ac.deu.computer_engineering.Absenteeism.Management.route.user.dto.UserDto;
 import kr.ac.deu.computer_engineering.Absenteeism.Management.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -43,9 +41,6 @@ public class UserViewController {
     @RequestMapping("/detailView")
     public String detailView(Model model) {
         model.addAttribute("title", "사용자 상세 페이지");
-        UserDto user = new UserDto();
-        user.setName("Test");
-        model.addAttribute("user", user);
         return "user/item.html";
     }
 
