@@ -82,14 +82,13 @@ public class UserService {
         Optional<Rank> rank = rankRepository.findById(dto.getRankId());
         if (rank.isEmpty()) throw new CustomIllegalStateExceptionHandler("존재하지 않는 직급입니다.");
         if (dto.getRankId() == 2L) {
-            if (!checkContainsBoth(dto.getRoleIdList(), 2L, 3L)) throw new CustomIllegalStateExceptionHandler("직급이 부서관리자이면, 시스템원한은 사원과 부서장 모두 선택해야합니다.");
+            if (!checkContainsBoth(dto.getRoleIdList(), 2L, 3L)) throw new CustomIllegalStateExceptionHandler("직급이 부서관리자이면, 시스템권한은 사원과 부서장 모두 선택해야합니다.");
         } else if (dto.getRankId() == 3L) {
-            if (dto.getRoleIdList().stream().filter(t -> !t.equals(3L)).collect(Collectors.toList()).size() > 0) throw new CustomIllegalStateExceptionHandler("직급이 사원이면, 시스템원한은 사원만 선택해야합니다.");
+            if (dto.getRoleIdList().stream().filter(t -> !t.equals(3L)).collect(Collectors.toList()).size() > 0) throw new CustomIllegalStateExceptionHandler("직급이 사원이면, 시스템권한은 사원만 선택해야합니다.");
         }
         dto.setIsManager(dto.getRankId() == 2L);
         User result = dto.toEntity(team.get(), rank.get(), company.get());
         userRepository.save(result);
-        userAndRoleRepository.deleteAllByUserId(result.getId());
         List<UserAndRole> uar = new ArrayList<>();
         for(Long roleId: dto.getRoleIdList()) {
             UserAndRole item = new UserAndRole();
