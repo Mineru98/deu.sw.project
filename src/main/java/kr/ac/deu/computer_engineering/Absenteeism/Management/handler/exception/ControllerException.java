@@ -27,7 +27,7 @@ public class ControllerException {
     @ExceptionHandler(Exception.class)
     public ResponseDTO<?> allExceptionsHandler(Exception e, HttpServletRequest request) {
         e.printStackTrace();
-        return new ResponseDTO<>(ResState.ERROR, "알수 없는 오류가 발생했습니다. 관리자에게 문의해 주세요.");
+        return new ResponseDTO<>(ResState.ERROR, "알 수 없는 오류가 발생했습니다. 관리자에게 문의해 주세요.");
     }
 
     /**
