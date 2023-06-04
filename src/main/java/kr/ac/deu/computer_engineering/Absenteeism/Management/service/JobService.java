@@ -49,7 +49,7 @@ public class JobService {
                 healthCheck.setUser(user);
                 healthCheck.setIsVerified(false);
                 healthCheck.setIsCompleted(false);
-                // 비사무직이거나 사무직인 경우 현재 년도와 생년월일의 홀&짝이 동일한 경우 건강검진 내역을 추가합니다.g
+                // 비사무직이거나 사무직인 경우 현재 년도와 생년월일의 홀&짝이 동일한 경우 건강검진 내역을 추가합니다.
                 if (!user.getIsOfficer() || user.getIsOfficer() && (currentYear % 2 == (user.getBirthDay().getYear() % 2))) {
                     healthCheck.setApplyYear(currentYear);
                     healthCheckHistoryRepository.save(healthCheck);

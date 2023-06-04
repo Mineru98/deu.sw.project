@@ -14,19 +14,19 @@ import java.util.List;
 
 @Data
 public class UserDto {
-    @NotEmpty(message = "빈문자열은 허용하지 않습니다.")
+    @NotEmpty(message = "이름은 빈문자열을 허용하지 않습니다.")
     @NotNull(message = "이름을 입력해주세요.")
     @Size(min = 2, max = 8, message = "이름은 2자를 넘어야하고, 8자를 초과할 수 없습니다.")
     private String name; // 직원 이름
 
-    @NotEmpty(message = "빈문자열은 허용하지 않습니다.")
+    @NotEmpty(message = "아이디는 빈문자열을 허용하지 않습니다.")
     @NotNull(message = "아이디를 입력해주세요.")
     @Size(min = 4, max = 16, message = "아이디는 4자를 넘어야하고, 16자를 초과할 수 없습니다.")
     @Pattern(regexp = "^[a-zA-Z0-9]{4,16}$", message = "아이디는 영어와 숫자로만 입력되어야 합니다.")
     private String username; // 로그인 계정
 
-    @NotEmpty(message = "빈문자열은 허용하지 않습니다.")
-    @NotNull(message = "입사일을 입력해주세요.")
+    @NotEmpty(message = "비밀번호는 빈문자열을 허용하지 않습니다.")
+    @NotNull(message = "비밀번호를 입력해주세요.")
     @Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*#?&])[A-Za-z\\d@$!%*#?&]{8,16}$",
             message = "비밀번호는 최소 8자리 이상, 최대 16자리 이하의 소문자, 대문자, 숫자, 특수문자(@$!%*#?&)를 포함해야 합니다.")
     private String password;
