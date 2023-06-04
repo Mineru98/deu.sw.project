@@ -28,7 +28,7 @@ public class JobService {
     }
 
     //    @Scheduled(cron = "*/10 * * * * *")
-    @Scheduled(cron = "0 0 0 * * *")
+    @Scheduled(cron = "0 10 0 * * *")
     public void calcHealthCheckHistory() {
         log.info("SCHEDULER START");
         // 현재 년도를 가져옵니다.
