@@ -146,7 +146,7 @@ public class UserService {
             t.setDateOfLeave(dto.getDateOfLeave());
             t.setContactNumber(dto.getContactNumber());
             t.setNetworkMacAddress(dto.getNetworkMacAddress());
-            t.setIsManager(dto.getIsManager());
+            t.setIsManager(dto.getRankId() == 2L);
             t.setIsOfficer(dto.getIsOfficer());
             if (dto.getCompanyId() != null) {
                 Optional<Company> company = companyRepository.findById(dto.getCompanyId());

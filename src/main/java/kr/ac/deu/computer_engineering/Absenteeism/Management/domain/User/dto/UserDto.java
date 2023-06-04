@@ -55,7 +55,7 @@ public class UserDto {
 
     private Boolean isManager; // 관리자 여부
 
-    private Boolean isOfficer; // 사무직 여부
+    private Boolean isOfficer = true; // 사무직 여부
 
     @NotNull(message = "부서를 선택해주세요.")
     private Long teamId; // 부서
