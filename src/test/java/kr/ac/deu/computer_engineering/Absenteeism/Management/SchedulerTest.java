@@ -124,28 +124,25 @@ public class SchedulerTest {
         List<User> historyUserList = histories.stream().map(HealthCheckHistory::getUser).collect(Collectors.toList());
         // 현재 년도에 건강검진 내역이 있는 직원을 제거합니다.
         userList.removeIf(user -> historyUserList.stream().anyMatch(historyUser -> Objects.equals(historyUser.getId(), user.getId())));
-        // 직원 목록이 0보다 큰 경우만 다음 로직은 진행합니다.
-        if (userList.size() > 0) {
-            for (User user : userList) {
-                HealthCheckHistory healthCheck = new HealthCheckHistory();
-                healthCheck.setUser(user);
-                healthCheck.setIsVerified(false);
-                healthCheck.setIsCompleted(false);
-                // 비사무직이거나 사무직인 경우 현재 년도와 생년월일의 홀&짝이 동일한 경우 건강검진 내역을 추가합니다.
-                if (!user.getIsOfficer() || user.getIsOfficer() && (currentYear % 2 == (user.getBirthDay().getYear() % 2))) {
-                    healthCheck.setApplyYear(currentYear);
+        for (User user : userList) {
+            HealthCheckHistory healthCheck = new HealthCheckHistory();
+            healthCheck.setUser(user);
+            healthCheck.setIsVerified(false);
+            healthCheck.setIsCompleted(false);
+            // 비사무직이거나 사무직인 경우 현재 년도와 생년월일의 홀&짝이 동일한 경우 건강검진 내역을 추가합니다.
+            if (!user.getIsOfficer() || user.getIsOfficer() && (currentYear % 2 == (user.getBirthDay().getYear() % 2))) {
+                healthCheck.setApplyYear(currentYear);
 //                    System.out.println("UserId : " + healthCheck.getUser().getId() + ", " +
 //                            "사무직여부 : " + healthCheck.getUser().getIsOfficer() + ", " +
 //                            "생년월일 : " + healthCheck.getUser().getBirthDay() + ", " +
 //                            "입사일 : " + healthCheck.getUser().getDateOfJoin() + ", " +
 //                            "퇴사일 : " + healthCheck.getUser().getDateOfLeave() + ", " +
 //                            "건강검진해당년도 : " + healthCheck.getApplyYear());
-                    System.out.println("("+
-                            healthCheck.getUser().getIsOfficer() + ", " +
-                            healthCheck.getUser().getBirthDay() + ", " +
-                            healthCheck.getUser().getDateOfJoin() + ", " +
-                            healthCheck.getUser().getDateOfLeave() + ")");
-                }
+                System.out.println("("+
+                        healthCheck.getUser().getIsOfficer() + ", " +
+                        healthCheck.getUser().getBirthDay() + ", " +
+                        healthCheck.getUser().getDateOfJoin() + ", " +
+                        healthCheck.getUser().getDateOfLeave() + ")");
             }
         }
     }
