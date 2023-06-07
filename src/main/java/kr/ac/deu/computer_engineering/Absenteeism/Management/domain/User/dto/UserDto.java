@@ -31,7 +31,7 @@ public class UserDto {
             message = "비밀번호는 최소 8자리 이상, 최대 16자리 이하의 소문자, 대문자, 숫자, 특수문자(@$!%*#?&)를 포함해야 합니다.")
     private String password;
 
-    @NotBlank(message = "입사일을 입력해주세요.")
+    @NotNull(message = "입사일을 입력해주세요.")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     @PastOrPresent
     private LocalDate dateOfJoin; // 입사일
@@ -40,7 +40,7 @@ public class UserDto {
     @PastOrPresent
     private LocalDate dateOfLeave; // 퇴사일
 
-    @NotBlank(message = "생년월일을 입력해주세요.")
+    @NotNull(message = "생년월일을 입력해주세요.")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     @PastOrPresent
     private LocalDate birthDay; // 생년월일
