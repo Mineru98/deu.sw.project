@@ -7,16 +7,63 @@
     <link href="https://cdn.jsdelivr.net/npm/daisyui@2.51.5/dist/full.css" rel="stylesheet" type="text/css"/>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="/js/control.js"></script>
+    <script>
+        $(document).ready(function () {
+            // 모달 열기 버튼 클릭 시
+            $("#add-btn").click(function () {
+                $("#add-modal").removeClass("hidden");
+            });
+
+            // 모달 닫기 버튼 클릭 시
+            $(".close").click(function (e) {
+                e.stopPropagation();
+                $("#add-modal").addClass("hidden");
+            });
+
+            // 부서 등록
+            $('form').submit(function (event) {
+                event.preventDefault(); // 기본 제출 동작 방지
+                const formData = $('form').serializeArray();
+                const data = {
+                };
+                $.each(formData, function (index, field) {
+                    data[field.name] = field.value
+                });
+                $.ajax({
+                    url: '/api/team',
+                    type: 'POST',
+                    data: JSON.stringify(data),
+                    contentType: 'application/json',
+                    success: function (res) {
+                        if (res.state === "CREATED") {
+                            window.location.href = "/team/list";
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        // 오류 처리
+                        if (Object.keys(xhr.responseJSON).filter((t) => t === "state")) {
+                            alert(xhr.responseJSON.message);
+                        } else if (Object.keys(xhr.responseJSON).filter((t) => t === "message")) {
+                            xhr.responseJSON.message.forEach((t) => {
+                                alert(t);
+                            });
+                        }
+                    }
+                });
+            });
+        });
+    </script>
 </head>
 <body>
 <header th:replace="~{layouts/header :: header}"></header>
-<div class="flex bg-[#3A3A5A]">
+<div class="flex bg-[#2E2E48]">
     <nav th:replace="~{layouts/menu :: menu}"></nav>
     <main class="flex-1 flex flex-col h-screen">
         <div th:replace="~{layouts/profile :: profile}"></div>
         <div class="flex-1 flex flex-col">
-            <div class="flex flex-1"></div>
-            <div class="flex flex-1"></div>
+            <div class="flex flex-1 justify-center">
+
+            </div>
         </div>
     </main>
 </div>

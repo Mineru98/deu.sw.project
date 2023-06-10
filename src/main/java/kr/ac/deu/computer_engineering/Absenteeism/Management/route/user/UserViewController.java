@@ -2,6 +2,7 @@ package kr.ac.deu.computer_engineering.Absenteeism.Management.route.user;
 
 import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.User.dto.UserMapping;
 import kr.ac.deu.computer_engineering.Absenteeism.Management.service.user.UserService;
+import kr.ac.deu.computer_engineering.Absenteeism.Management.utils.RoleValidate;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,9 +23,13 @@ public class UserViewController {
     public String listView(Model model, HttpServletRequest req) {
         model.addAttribute("title", "사용자 목록 페이지");
         HttpSession session = req.getSession();
+        model.addAttribute("userId", session.getAttribute("userId"));
         model.addAttribute("name", session.getAttribute("name"));
         model.addAttribute("teamName", session.getAttribute("teamName"));
         model.addAttribute("rankName", session.getAttribute("rankName"));
+        model.addAttribute("isRoleManager", RoleValidate.isRoleManager(session));
+        model.addAttribute("isRoleCeo", RoleValidate.isRoleCeo(session));
+        model.addAttribute("isRoleStaff", RoleValidate.isRoleStaff(session));
         return "user/list.html";
     }
 
@@ -33,9 +38,13 @@ public class UserViewController {
     public String addView(Model model, HttpServletRequest req) {
         model.addAttribute("title", "사용자 등록 페이지");
         HttpSession session = req.getSession();
+        model.addAttribute("userId", session.getAttribute("userId"));
         model.addAttribute("name", session.getAttribute("name"));
         model.addAttribute("teamName", session.getAttribute("teamName"));
         model.addAttribute("rankName", session.getAttribute("rankName"));
+        model.addAttribute("isRoleManager", RoleValidate.isRoleManager(session));
+        model.addAttribute("isRoleCeo", RoleValidate.isRoleCeo(session));
+        model.addAttribute("isRoleStaff", RoleValidate.isRoleStaff(session));
         return "user/add.html";
     }
 
@@ -44,9 +53,13 @@ public class UserViewController {
     public String detailView(Model model, HttpServletRequest req) {
         model.addAttribute("title", "사용자 상세 페이지");
         HttpSession session = req.getSession();
+        model.addAttribute("userId", session.getAttribute("userId"));
         model.addAttribute("name", session.getAttribute("name"));
         model.addAttribute("teamName", session.getAttribute("teamName"));
         model.addAttribute("rankName", session.getAttribute("rankName"));
+        model.addAttribute("isRoleManager", RoleValidate.isRoleManager(session));
+        model.addAttribute("isRoleCeo", RoleValidate.isRoleCeo(session));
+        model.addAttribute("isRoleStaff", RoleValidate.isRoleStaff(session));
         return "user/item.html";
     }
 
@@ -55,9 +68,13 @@ public class UserViewController {
     public String myPageView(Model model, HttpServletRequest req) {
         model.addAttribute("title", "마이페이지");
         HttpSession session = req.getSession();
+        model.addAttribute("userId", session.getAttribute("userId"));
         model.addAttribute("name", session.getAttribute("name"));
         model.addAttribute("teamName", session.getAttribute("teamName"));
         model.addAttribute("rankName", session.getAttribute("rankName"));
+        model.addAttribute("isRoleManager", RoleValidate.isRoleManager(session));
+        model.addAttribute("isRoleCeo", RoleValidate.isRoleCeo(session));
+        model.addAttribute("isRoleStaff", RoleValidate.isRoleStaff(session));
         return "user/myPage.html";
     }
 }

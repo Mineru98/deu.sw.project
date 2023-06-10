@@ -8,9 +8,83 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="/js/control.js"></script>
     <script>
+
+        function init() {
+            $.ajax({
+                url: '/api/company?q=',
+                type: 'GET',
+                contentType: 'application/json',
+                success: function (res) {
+                    if (res.state === "OK") {
+                        const items = $('#companyId');
+                        res.data.forEach((item) => {
+                            items.append('<option label="바디메이트(본사)" value="'+item.id+'">'+item.companyName+'</option>')
+                        });
+                    }
+                },
+                error: function (xhr, status, error) {
+                    // 오류 처리
+                    if (Object.keys(xhr.responseJSON).filter((t) => t === "state")) {
+                        alert(xhr.responseJSON.message);
+                    } else if (Object.keys(xhr.responseJSON).filter((t) => t === "message")) {
+                        xhr.responseJSON.message.forEach((t) => {
+                            alert(t);
+                        });
+                    }
+                }
+            });
+            $.ajax({
+                url: '/api/team?q=',
+                type: 'GET',
+                contentType: 'application/json',
+                success: function (res) {
+                    if (res.state === "OK") {
+                        const items = $('#teamId');
+                        res.data.forEach((item) => {
+                            items.append('<option value="'+item.id+'">'+item.teamName+'</option>')
+                        });
+                    }
+                },
+                error: function (xhr, status, error) {
+                    // 오류 처리
+                    if (Object.keys(xhr.responseJSON).filter((t) => t === "state")) {
+                        alert(xhr.responseJSON.message);
+                    } else if (Object.keys(xhr.responseJSON).filter((t) => t === "message")) {
+                        xhr.responseJSON.message.forEach((t) => {
+                            alert(t);
+                        });
+                    }
+                }
+            });
+            $.ajax({
+                url: '/api/rank',
+                type: 'GET',
+                contentType: 'application/json',
+                success: function (res) {
+                    if (res.state === "OK") {
+                        const items = $('#rankId');
+                        res.data.forEach((item) => {
+                            items.append('<option value="'+item.id+'">'+item.rankName+'</option>')
+                        });
+                    }
+                },
+                error: function (xhr, status, error) {
+                    // 오류 처리
+                    if (Object.keys(xhr.responseJSON).filter((t) => t === "state")) {
+                        alert(xhr.responseJSON.message);
+                    } else if (Object.keys(xhr.responseJSON).filter((t) => t === "message")) {
+                        xhr.responseJSON.message.forEach((t) => {
+                            alert(t);
+                        });
+                    }
+                }
+            });
+        }
+
         $(document).ready(function () {
             // 모달 열기 버튼 클릭 시
             $("#add-btn").click(function () {
+                init();
                 $("#add-modal").removeClass("hidden");
             });
 
@@ -18,7 +92,12 @@
             $(".close").click(function (e) {
                 e.stopPropagation();
                 $("#add-modal").addClass("hidden");
+                $("#companyId").empty();
+                $("#teamId").empty();
+                $("#rankId").empty();
             });
+
+            // 직원 등록
             $('form').submit(function (event) {
                 event.preventDefault(); // 기본 제출 동작 방지
                 const formData = $('form').serializeArray();
@@ -69,7 +148,7 @@
 </head>
 <body>
 <header th:replace="~{layouts/header :: header}"></header>
-<div class="flex bg-[#3A3A5A]">
+<div class="flex bg-[#2E2E48]">
     <nav th:replace="~{layouts/menu :: menu}"></nav>
     <main class="flex-1 flex flex-col h-screen">
         <div th:replace="~{layouts/profile :: profile}"></div>
@@ -86,7 +165,7 @@
             <div id="add-modal"
                  class="z-50 hidden fixed w-full h-full left-0 flex items-center justify-center">
                 <div class="close absolute inset-0 bg-black opacity-50 top-[-48px]"></div>
-                <div class="modal-content bg-white w-1/2 p-4 rounded shadow max-h-[42rem] overflow-scroll z-[51]">
+                <div class="modal-content bg-white w-1/2 p-4 rounded shadow max-h-[42rem] overflow-y-scroll z-[51]">
                     <h2 class="text-xl font-bold mb-4">직원 등록</h2>
                     <form class="space-y-6" action="#">
                         <div>
@@ -160,30 +239,22 @@
                             <label for="companyId"
                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">회사</label>
                             <select id="companyId" class="select select-bordered w-full max-w-xs">
-                                <option label="바디메이트(본사)" value="1" selected>바디메이트(본사)</option>
-                                <option label="바디메이트(부산지사)" value="2">바디메이트(부산지사)</option>
                             </select>
                         </div>
                         <div class="flex justify-between">
                             <label for="teamId"
                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">부서</label>
                             <select id="teamId" class="select select-bordered w-full max-w-xs">
-                                <option label="경영팀" value="1" selected>경영팀</option>
-                                <option label="개발팀" value="2">개발팀</option>
-                                <option label="마케팅팀" value="3">마케팅팀</option>
                             </select>
                         </div>
                         <div class="flex justify-between">
                             <label for="rankId"
                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">직급</label>
                             <select id="rankId" class="select select-bordered w-full max-w-xs">
-                                <option label="대표이사" value="1" selected>대표이사</option>
-                                <option label="부서관리자" value="2">부서관리자</option>
-                                <option label="직원" value="3">직원</option>
                             </select>
                         </div>
                         <button type="submit"
-                                class="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                                class="w-full text-white bg-indigo-600 hover:bg-indigo-500 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
                             등록
                         </button>
                     </form>

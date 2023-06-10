@@ -20,9 +20,13 @@ public class MainViewController {
     public String mainView(Model model, HttpServletRequest req) {
         model.addAttribute("title", "메인 페이지");
         HttpSession session = req.getSession();
+        model.addAttribute("userId", session.getAttribute("userId"));
         model.addAttribute("name", session.getAttribute("name"));
         model.addAttribute("teamName", session.getAttribute("teamName"));
         model.addAttribute("rankName", session.getAttribute("rankName"));
+        model.addAttribute("isRoleManager", RoleValidate.isRoleManager(session));
+        model.addAttribute("isRoleCeo", RoleValidate.isRoleCeo(session));
+        model.addAttribute("isRoleStaff", RoleValidate.isRoleStaff(session));
         if (RoleValidate.getUserId(session) != null) {
             // View에게 Controller로부터
             return "main/index.html";

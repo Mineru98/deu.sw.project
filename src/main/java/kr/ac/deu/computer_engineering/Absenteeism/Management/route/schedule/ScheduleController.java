@@ -6,6 +6,8 @@ import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.Account.dto.
 import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.Schedule.Schedule;
 import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.Schedule.dto.ScheduleDto;
 import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.Schedule.dto.ScheduleDto;
+import kr.ac.deu.computer_engineering.Absenteeism.Management.enums.ResState;
+import kr.ac.deu.computer_engineering.Absenteeism.Management.handler.exception.ResponseDTO;
 import kr.ac.deu.computer_engineering.Absenteeism.Management.service.schedule.ScheduleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -32,7 +34,7 @@ public class ScheduleController {
             @RequestParam(required = false) LocalDate endDate
     ) {
         List<Schedule> result = scheduleService.getList(userId, beginDate, endDate);
-        return new ResponseEntity<>(result, HttpStatus.OK);
+        return new ResponseEntity<>(new ResponseDTO<>(ResState.OK, result), HttpStatus.OK);
     }
 
     @Tag(name = "일정")
@@ -41,8 +43,8 @@ public class ScheduleController {
             description = "일정 상세 조회")
     @GetMapping("/{scheduleId}")
     public ResponseEntity<?> getItemById(@PathVariable Long scheduleId) {
-        Schedule schedule = scheduleService.getSchduleById(scheduleId);
-        return new ResponseEntity<>(schedule, HttpStatus.OK);
+        Schedule result = scheduleService.getSchduleById(scheduleId);
+        return new ResponseEntity<>(new ResponseDTO<>(ResState.OK, result), HttpStatus.OK);
     }
 
     @Tag(name = "일정")

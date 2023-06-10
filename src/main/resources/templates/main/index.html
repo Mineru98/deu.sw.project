@@ -7,16 +7,97 @@
     <link href="https://cdn.jsdelivr.net/npm/daisyui@2.51.5/dist/full.css" rel="stylesheet" type="text/css"/>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="/js/control.js"></script>
+    <script>
+        const userId = [[${userId}]];
+
+        $(document).ready(function () {
+            $.ajax({
+                url: `/api/schedule?userId=${userId}`,
+                type: 'GET',
+                contentType: 'application/json',
+                success: function (res) {
+                    if (res.state === "OK") {
+                        $("#scheduleList").empty();
+                    }
+                },
+                error: function (xhr, status, error) {
+                    // 오류 처리
+                    if (Object.keys(xhr.responseJSON).filter((t) => t === "state")) {
+                        alert(xhr.responseJSON.message);
+                    } else if (Object.keys(xhr.responseJSON).filter((t) => t === "message")) {
+                        xhr.responseJSON.message.forEach((t) => {
+                            alert(t);
+                        });
+                    }
+                }
+            });
+
+            $.ajax({
+                url: `/api/health?userId=${userId}`,
+                type: 'GET',
+                contentType: 'application/json',
+                success: function (res) {
+                    if (res.state === "OK") {
+                        $("#healthCheckList").empty();
+                    }
+                },
+                error: function (xhr, status, error) {
+                    // 오류 처리
+                    if (Object.keys(xhr.responseJSON).filter((t) => t === "state")) {
+                        alert(xhr.responseJSON.message);
+                    } else if (Object.keys(xhr.responseJSON).filter((t) => t === "message")) {
+                        xhr.responseJSON.message.forEach((t) => {
+                            alert(t);
+                        });
+                    }
+                }
+            });
+        });
+    </script>
 </head>
 <body>
 <header th:replace="~{layouts/header :: header}"></header>
-<div class="flex bg-[#3A3A5A]">
+<div class="flex bg-[#2E2E48]">
     <nav th:replace="~{layouts/menu :: menu}"></nav>
     <main class="flex-1 flex flex-col h-screen">
         <div th:replace="~{layouts/profile :: profile}"></div>
-        <div class="flex-1 flex flex-col">
-            <div class="flex flex-1"></div>
-            <div class="flex flex-1"></div>
+        <div class="flex flex-1 flex-row">
+            <div class="flex flex-[2] flex-col rounded-lg drop-shadow-xl bg-[3A3A5A] m-8 p-4">
+                <h3 class="flex h-12 text-lg text-white font-bold items-center">환영합니다. <span th:text="${name} "></span>
+                    고객님</h3>
+                <table>
+                    <thead>
+                    <tr>
+                        <th class="text-zinc-200">근무 일정</th>
+                        <th class="text-zinc-200">출근 시간</th>
+                        <th class="text-zinc-200">퇴근 시간</th>
+                        <th class="text-zinc-200">승인여부</th>
+                    </tr>
+                    </thead>
+                    <tbody id="schduleList">
+                    </tbody>
+                </table>
+            </div>
+            <div class="flex flex-1 flex-col rounded-lg drop-shadow-xl bg-[3A3A5A] mr-8 my-8 p-4"></div>
+        </div>
+        <div class="flex flex-1 flex-row">
+            <div class="flex flex-[2] flex-col rounded-lg drop-shadow-xl bg-[3A3A5A] m-8 p-4">
+                <h3 class="flex h-12 text-lg text-white font-bold items-center"><span th:text="${name} "></span> 고객님의
+                    건강검진 현황입니다.</h3>
+                <table>
+                    <thead>
+                    <tr>
+                        <th class="text-zinc-200">건강검진 예정일</th>
+                        <th class="text-zinc-200">검진 일자</th>
+                        <th class="text-zinc-200">검진여부</th>
+                        <th class="text-zinc-200">승인여부</th>
+                    </tr>
+                    </thead>
+                    <tbody id="healthCheckList">
+                    </tbody>
+                </table>
+            </div>
+            <div class="flex flex-1 flex-col mr-8 my-8 p-4"></div>
         </div>
     </main>
 </div>
