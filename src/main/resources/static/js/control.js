@@ -3,35 +3,35 @@ $(function () {
     if (pathname.split("/").length > 0) {
         let navBarId = 0;
         switch (pathname.split("/")[1]) {
-            case "company":
+            case "user":
                 navBarId = 1;
                 break;
             case "team":
                 navBarId = 2;
                 break;
-            case "rank":
+            case "account":
                 navBarId = 3;
                 break;
-            case "allowance":
-                navBarId = 4;
+            case "schedule":
+                navBarId = 4
                 break;
-            case "user":
+            case "rank":
                 navBarId = 5;
                 break;
-            case "schedule":
+            case "health":
                 navBarId = 6;
                 break;
             case "statement":
                 navBarId = 7;
                 break;
-            case "health":
+            case "company":
                 navBarId = 8;
                 break;
-            case "account":
+            case "allowance":
                 navBarId = 9;
                 break;
         }
-        $("#navBar-" + navBarId).removeClass("bg-slate-200").addClass("bg-slate-100").addClass("on");
+        $("#navBar-" + navBarId).removeClass("bg-[#565665]").addClass("bg-[#2C2C45]").addClass("on");
     }
 
     // 메뉴바 제어 클릭
@@ -45,38 +45,60 @@ $(function () {
         }
     });
 
+    $("#root").on("click", function () {
+        window.location.href = "/";
+    });
+
+    $("#logout").on("click", function () {
+        $.ajax({
+            url: '/api/auth/logout',
+            type: 'POST',
+            data: null,
+            contentType: 'application/json',
+            success: function (res) {
+                if (res.state === "OK") {
+                    window.location.href = "/auth/login"
+                }
+            },
+            error: function (xhr, status, error) {
+                // 오류 처리
+                console.log(xhr);
+            }
+        });
+    });
+
     // 네비게이션바 클릭
     $("[id^=navBar-]").on("click", function () {
         if (!$(this).hasClass("on")) {
-            $(this).siblings().removeClass("bg-slate-100").addClass("bg-slate-200").removeClass("on");
-            $(this).removeClass("bg-slate-200").addClass("bg-slate-100").addClass("on");
+            $(this).siblings().removeClass("bg-[#565665]").addClass("bg-[#2C2C45]").removeClass("on");
+            $(this).removeClass("bg-[#2C2C45]").addClass("bg-[#565665]").addClass("on");
             switch ($(this).attr("id")) {
                 case "navBar-1":
-                    window.location.href = "/company/detailView";
+                    window.location.href = "/user/list";
                     break;
                 case "navBar-2":
                     window.location.href = "/team/list";
                     break;
                 case "navBar-3":
-                    window.location.href = "/rank/list";
+                    window.location.href = "/account/list";
                     break;
                 case "navBar-4":
-                    window.location.href = "/allowance/list";
+                    window.location.href = "/schedule/list";
                     break;
                 case "navBar-5":
-                    window.location.href = "/user/list";
+                    window.location.href = "/rank/list";
                     break;
                 case "navBar-6":
-                    window.location.href = "/schedule/list";
+                    window.location.href = "/health/list";
                     break;
                 case "navBar-7":
                     window.location.href = "/statement/list";
                     break;
                 case "navBar-8":
-                    window.location.href = "/health/list";
+                    window.location.href = "/company/detailView";
                     break;
                 case "navBar-9":
-                    window.location.href = "/account/list";
+                    window.location.href = "/allowance/list";
                     break;
             }
         }

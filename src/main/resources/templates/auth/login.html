@@ -10,12 +10,38 @@
           integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp"
           crossorigin="anonymous">
     <script>
-        $(function () {
+        $(document).ready(function () {
+            $('form').submit(function (event) {
+                event.preventDefault(); // 기본 제출 동작 방지
 
+                const username = $('#username').val();
+                const password = $('#password').val();
+
+                const data = {
+                    username: username,
+                    password: password
+                };
+
+                $.ajax({
+                    url: '/api/auth/login',
+                    type: 'POST',
+                    data: JSON.stringify(data),
+                    contentType: 'application/json',
+                    success: function (res) {
+                        if (res.state === "OK") {
+                            window.location.href = "/"
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        // 오류 처리
+                        console.log(xhr);
+                    }
+                });
+            });
         });
     </script>
 </head>
-<body class="h-screen font-sans login bg-cover">
+<body class="h-screen font-sans login bg-cover bg-[#3A3A5A]">
 <main class="container mx-auto h-full flex flex-1 justify-center items-center">
     <div class="w-full max-w-lg">
         <div class="leading-loose">
@@ -29,7 +55,7 @@
                 <div class="mt-2">
                     <label class="block text-sm text-gray-600" for="password">비밀번호</label>
                     <input class="w-full px-5  py-1 text-gray-700 bg-gray-200 rounded" id="password" name="password"
-                           type="text" required="" placeholder="비밀번호를 입력하세요." aria-label="password">
+                           type="password" required="" placeholder="비밀번호를 입력하세요." aria-label="password">
                 </div>
                 <div class="mt-4 items-center justify-between">
                     <button class="btn px-4 py-1 text-white tracking-wider bg-gray-900 rounded" type="submit">

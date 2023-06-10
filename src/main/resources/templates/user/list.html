@@ -7,28 +7,189 @@
     <link href="https://cdn.jsdelivr.net/npm/daisyui@2.51.5/dist/full.css" rel="stylesheet" type="text/css"/>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="/js/control.js"></script>
+    <script>
+        $(document).ready(function () {
+            // 모달 열기 버튼 클릭 시
+            $("#add-btn").click(function () {
+                $("#add-modal").removeClass("hidden");
+            });
+
+            // 모달 닫기 버튼 클릭 시
+            $(".close").click(function (e) {
+                e.stopPropagation();
+                $("#add-modal").addClass("hidden");
+            });
+            $('form').submit(function (event) {
+                event.preventDefault(); // 기본 제출 동작 방지
+                const formData = $('form').serializeArray();
+                const roleIdList = $('#roleIdList').val();
+                const data = {
+                    "companyId": parseInt($('#companyId').val(), 10),
+                    "teamId": parseInt($('#teamId').val(), 10),
+                    "rankId": parseInt($('#rankId').val(), 10),
+                    "isOfficer": $('#isOfficer').is(":checked"),
+                };
+                if (roleIdList === "1") {
+                    data.roleIdList = [1];
+                    data.isManager = false;
+                } else if (roleIdList === "2") {
+                    data.roleIdList = [2, 3];
+                    data.isManager = true;
+                } else if (roleIdList === "3") {
+                    data.roleIdList = [3];
+                    data.isManager = false;
+                }
+                $.each(formData, function (index, field) {
+                    data[field.name] = field.value
+                });
+                $.ajax({
+                    url: '/api/user',
+                    type: 'POST',
+                    data: JSON.stringify(data),
+                    contentType: 'application/json',
+                    success: function (res) {
+                        if (res.state === "CREATED") {
+                            window.location.href = "/user/list";
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        // 오류 처리
+                        if (Object.keys(xhr.responseJSON).filter((t) => t === "state")) {
+                            alert(xhr.responseJSON.message);
+                        } else if (Object.keys(xhr.responseJSON).filter((t) => t === "message")) {
+                            xhr.responseJSON.message.forEach((t) => {
+                                alert(t);
+                            });
+                        }
+                    }
+                });
+            });
+        });
+    </script>
 </head>
 <body>
 <header th:replace="~{layouts/header :: header}"></header>
-<div class="flex">
+<div class="flex bg-[#3A3A5A]">
     <nav th:replace="~{layouts/menu :: menu}"></nav>
-    <main class="flex-1 flex h-screen">
-        <table class="table table-striped">
-            <thead>
-            <tr>
-                <th>이름</th>
-                <th>입사일</th>
-                <th>퇴사일</th>
-            </tr>
-            </thead>
-            <tbody>
-                <tr th:each="item : ${userList}">
-                    <td th:text="${item.name}"></td>
-                    <td th:text="${#temporals.format(item.dateOfJoin, 'yyyy-MM-dd')}"></td>
-                    <td th:text="${#temporals.format(item.dateOfLeave, 'yyyy-MM-dd')}"></td>
-                </tr>
-            </tbody>
-        </table>
+    <main class="flex-1 flex flex-col h-screen">
+        <div th:replace="~{layouts/profile :: profile}"></div>
+        <div class="flex-1 flex flex-col">
+            <div class="flex basis-20 items-center justify-end px-4">
+                <button id="add-btn"
+                        class="btn px-4 py-1 text-white tracking-wider bg-indigo-600 hover:bg-indigo-500 rounded">
+                    직원등록
+                </button>
+            </div>
+            <div class="flex flex-1 justify-center">
+
+            </div>
+            <div id="add-modal"
+                 class="z-50 hidden fixed w-full h-full left-0 flex items-center justify-center">
+                <div class="close absolute inset-0 bg-black opacity-50 top-[-48px]"></div>
+                <div class="modal-content bg-white w-1/2 p-4 rounded shadow max-h-[42rem] overflow-scroll z-[51]">
+                    <h2 class="text-xl font-bold mb-4">직원 등록</h2>
+                    <form class="space-y-6" action="#">
+                        <div>
+                            <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">직원
+                                이름</label>
+                            <input type="text" name="name" id="name"
+                                   class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+                                   required>
+                        </div>
+                        <div>
+                            <label for="username" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">로그인
+                                계정</label>
+                            <input type="text" name="username" id="username"
+                                   class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+                                   required>
+                        </div>
+                        <div>
+                            <label for="password" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">비밀번호</label>
+                            <input type="password" name="password" id="password" placeholder="••••••••"
+                                   class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+                                   required>
+                        </div>
+                        <div>
+                            <label for="dateOfJoin"
+                                   class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">입사일</label>
+                            <input type="text" name="dateOfJoin" id="dateOfJoin"
+                                   class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+                                   required>
+                        </div>
+                        <div>
+                            <label for="birthDay" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">생년월일</label>
+                            <input type="text" name="birthDay" id="birthDay"
+                                   class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+                                   required>
+                        </div>
+                        <div>
+                            <label for="contactNumber"
+                                   class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">연락처</label>
+                            <input type="text" name="phoneNumber" id="contactNumber"
+                                   class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+                                   required>
+                        </div>
+                        <div>
+                            <label for="networkMacAddress"
+                                   class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">MAC 주소</label>
+                            <input type="text" name="macAddress" id="networkMacAddress"
+                                   class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+                                   required
+                            >
+                        </div>
+                        <div class="flex justify-between">
+                            <div class="flex items-start">
+                                <label for="isOfficer"
+                                       class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">사무직 여부</label>
+                                <div class="flex items-center h-5">
+                                    <input id="isOfficer" type="checkbox" value="" checked
+                                           class="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300 dark:bg-gray-600 dark:border-gray-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex justify-between">
+                            <label for="roleIdList"
+                                   class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">시스템 권한</label>
+                            <select id="roleIdList" class="select select-bordered w-full max-w-xs">
+                                <option label="대표이사" value="1" selected>대표이사</option>
+                                <option label="부서관리자" value="2">부서관리자</option>
+                                <option label="직원" value="3">직원</option>
+                            </select>
+                        </div>
+                        <div class="flex justify-between">
+                            <label for="companyId"
+                                   class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">회사</label>
+                            <select id="companyId" class="select select-bordered w-full max-w-xs">
+                                <option label="바디메이트(본사)" value="1" selected>바디메이트(본사)</option>
+                                <option label="바디메이트(부산지사)" value="2">바디메이트(부산지사)</option>
+                            </select>
+                        </div>
+                        <div class="flex justify-between">
+                            <label for="teamId"
+                                   class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">부서</label>
+                            <select id="teamId" class="select select-bordered w-full max-w-xs">
+                                <option label="경영팀" value="1" selected>경영팀</option>
+                                <option label="개발팀" value="2">개발팀</option>
+                                <option label="마케팅팀" value="3">마케팅팀</option>
+                            </select>
+                        </div>
+                        <div class="flex justify-between">
+                            <label for="rankId"
+                                   class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">직급</label>
+                            <select id="rankId" class="select select-bordered w-full max-w-xs">
+                                <option label="대표이사" value="1" selected>대표이사</option>
+                                <option label="부서관리자" value="2">부서관리자</option>
+                                <option label="직원" value="3">직원</option>
+                            </select>
+                        </div>
+                        <button type="submit"
+                                class="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                            등록
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
     </main>
 </div>
 <footer></footer>

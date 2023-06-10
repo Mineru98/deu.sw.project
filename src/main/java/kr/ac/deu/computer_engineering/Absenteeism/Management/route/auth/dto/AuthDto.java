@@ -8,7 +8,13 @@ import java.util.List;
 public class AuthDto {
     private Long userId;
 
-    private List<String> roleList;
+    private String name;
 
     private Long teamId;
+
+    private String teamName;
+
+    private String rankName;
+
+    private List<String> roleList;
 }

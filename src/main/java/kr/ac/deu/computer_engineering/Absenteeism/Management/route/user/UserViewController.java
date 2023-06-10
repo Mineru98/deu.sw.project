@@ -21,33 +21,43 @@ public class UserViewController {
     @RequestMapping("/list")
     public String listView(Model model, HttpServletRequest req) {
         model.addAttribute("title", "사용자 목록 페이지");
-        String name = req.getParameter("name");
         HttpSession session = req.getSession();
-        // 3, 4 실행
-        List<UserMapping> userList = userService.getList(name, session);
-        // View에게 Controller로부터
-        model.addAttribute("userList", userList);
+        model.addAttribute("name", session.getAttribute("name"));
+        model.addAttribute("teamName", session.getAttribute("teamName"));
+        model.addAttribute("rankName", session.getAttribute("rankName"));
         return "user/list.html";
     }
 
     // 직원 등록 화면(바운더리 Class)
     @RequestMapping("/add")
-    public String addView(Model model) {
+    public String addView(Model model, HttpServletRequest req) {
         model.addAttribute("title", "사용자 등록 페이지");
+        HttpSession session = req.getSession();
+        model.addAttribute("name", session.getAttribute("name"));
+        model.addAttribute("teamName", session.getAttribute("teamName"));
+        model.addAttribute("rankName", session.getAttribute("rankName"));
         return "user/add.html";
     }
 
     // 직원 상세 조회 화면(바운더리 Class)
     @RequestMapping("/detailView")
-    public String detailView(Model model) {
+    public String detailView(Model model, HttpServletRequest req) {
         model.addAttribute("title", "사용자 상세 페이지");
+        HttpSession session = req.getSession();
+        model.addAttribute("name", session.getAttribute("name"));
+        model.addAttribute("teamName", session.getAttribute("teamName"));
+        model.addAttribute("rankName", session.getAttribute("rankName"));
         return "user/item.html";
     }
 
     // 직원 자기 화면(바운더리 Class)
     @RequestMapping("/myPage")
-    public String myPageView(Model model) {
+    public String myPageView(Model model, HttpServletRequest req) {
         model.addAttribute("title", "마이페이지");
+        HttpSession session = req.getSession();
+        model.addAttribute("name", session.getAttribute("name"));
+        model.addAttribute("teamName", session.getAttribute("teamName"));
+        model.addAttribute("rankName", session.getAttribute("rankName"));
         return "user/myPage.html";
     }
 }

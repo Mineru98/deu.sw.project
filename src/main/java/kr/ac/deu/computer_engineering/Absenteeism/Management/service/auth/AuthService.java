@@ -33,7 +33,10 @@ public class AuthService {
             if (checkUsernameAndPassword.isPresent()) {
                 User user = checkUsernameAndPassword.get();
                 authDto.setTeamId(user.getTeam().getId());
+                authDto.setTeamName(user.getTeam().getTeamName());
                 authDto.setUserId(user.getId());
+                authDto.setName(user.getName());
+                authDto.setRankName(user.getRank().getRankName());
                 List<UserAndRole> roleList = userAndRoleRepository.findAllByUserId(user.getId());
                 if (roleList.size() > 0) {
                     List<String> roleArr = new ArrayList<>();

@@ -10,9 +10,14 @@
 </head>
 <body>
 <header th:replace="~{layouts/header :: header}"></header>
-<div class="flex">
+<div class="flex bg-[#3A3A5A]">
     <nav th:replace="~{layouts/menu :: menu}"></nav>
-    <main class="flex-1 flex h-screen">
+    <main class="flex-1 flex flex-col h-screen">
+        <div th:replace="~{layouts/profile :: profile}"></div>
+        <div class="flex-1 flex flex-col">
+            <div class="flex flex-1"></div>
+            <div class="flex flex-1"></div>
+        </div>
     </main>
 </div>
 <footer></footer>

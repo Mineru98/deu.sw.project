@@ -10,11 +10,11 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import javax.servlet.http.HttpServletRequest;
 
+@Slf4j
 @Order(ControllerException.ORDER)
 @RestControllerAdvice
-@Slf4j
 public class ControllerException {
-    public static final int ORDER = 0; // 타입때문에 레퍼클래스로 정의하지 못했습니다.
+    public static final int ORDER = 1; // 타입때문에 레퍼클래스로 정의하지 못했습니다.
 
     /**
      * 개발자가 미처 잡지 못한에러에 대한 핸들러
