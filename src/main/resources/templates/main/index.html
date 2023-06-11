@@ -98,7 +98,7 @@
             });
 
             $.ajax({
-                url: `/api/health?userId=${userId}&applyYear=2023`,
+                url: `/api/health/by_user?userId=${userId}&applyYear=2023`,
                 type: 'GET',
                 contentType: 'application/json',
                 success: function (res) {

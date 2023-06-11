@@ -30,11 +30,21 @@ public class HealthController {
             summary = "직장인건강보험 목록 조회",
             description = "직장인건강보험 목록 조회")
     @GetMapping("")
-    public ResponseEntity<?> getItemList(
+    public ResponseEntity<?> getItemList() {
+        List<HealthCheckHistory> result = healthService.getList();
+        return new ResponseEntity<>(new ResponseDTO<>(ResState.OK, result), HttpStatus.OK);
+    }
+
+    @Tag(name = "직장인건강보험")
+    @Operation(
+            summary = "직장인건강보험 목록 조회",
+            description = "직장인건강보험 목록 조회")
+    @GetMapping("/by_user")
+    public ResponseEntity<?> getItemListByUserId(
             @RequestParam(required = true) Long userId,
             @RequestParam(required = true) Integer applyYear
     ) {
-        List<HealthCheckHistory> result = healthService.getList(userId, applyYear);
+        List<HealthCheckHistory> result = healthService.getListByUserId(userId, applyYear);
         return new ResponseEntity<>(new ResponseDTO<>(ResState.OK, result), HttpStatus.OK);
     }
 

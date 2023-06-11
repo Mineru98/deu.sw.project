@@ -19,7 +19,12 @@ public class HealthService {
     private final HealthCheckHistoryRepository healthCheckHistoryRepository;
 
     @Transactional(readOnly = true)
-    public List<HealthCheckHistory> getList(Long userId, Integer applyYear) {
+    public List<HealthCheckHistory> getList() {
+        return healthCheckHistoryRepository.findAll();
+    }
+
+    @Transactional(readOnly = true)
+    public List<HealthCheckHistory> getListByUserId(Long userId, Integer applyYear) {
         Optional<User> user = userRepository.findById(userId);
         if (user.isPresent()) {
             return healthCheckHistoryRepository.findAllByUserAndApplyYear(user.get(), applyYear);
