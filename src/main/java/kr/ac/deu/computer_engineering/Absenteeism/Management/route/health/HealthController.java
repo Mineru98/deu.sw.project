@@ -2,11 +2,16 @@ package kr.ac.deu.computer_engineering.Absenteeism.Management.route.health;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.HealthCheckHistory.HealthCheckHistory;
+import kr.ac.deu.computer_engineering.Absenteeism.Management.enums.ResState;
+import kr.ac.deu.computer_engineering.Absenteeism.Management.handler.exception.ResponseDTO;
 import kr.ac.deu.computer_engineering.Absenteeism.Management.service.health.HealthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -19,8 +24,12 @@ public class HealthController {
             summary = "직장인건강보험 목록 조회",
             description = "직장인건강보험 목록 조회")
     @GetMapping("")
-    public ResponseEntity<?> getItemList() {
-        return new ResponseEntity<>(HttpStatus.OK);
+    public ResponseEntity<?> getItemList(
+            @RequestParam(required = true) Long userId,
+            @RequestParam(required = true) Integer applyYear
+    ) {
+        List<HealthCheckHistory> result = healthService.getList(userId, applyYear);
+        return new ResponseEntity<>(new ResponseDTO<>(ResState.OK, result), HttpStatus.OK);
     }
 
     @Tag(name = "직장인건강보험")

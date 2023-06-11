@@ -6,6 +6,9 @@
             integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8=" crossorigin="anonymous"></script>
     <link href="https://cdn.jsdelivr.net/npm/daisyui@2.51.5/dist/full.css" rel="stylesheet" type="text/css"/>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js"
+            integrity="sha512-WFN04846sdKMIP5LKNphMaWzU7YpMyCU245etK3g/2ARYbPK9Ub18eG+ljU96qKRCWh+quCY7yefSmlkQw1ANQ=="
+            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="/js/control.js"></script>
     <script>
         const userId = [[${userId}]];
@@ -17,7 +20,23 @@
                 contentType: 'application/json',
                 success: function (res) {
                     if (res.state === "OK") {
-                        $("#scheduleList").empty();
+                        const items = $("#scheduleList");
+                        items.empty();
+                        const groupedData = _.groupBy(res.data, item => item.applyDateTime.split('T')[0]);
+                        Object.keys(groupedData).forEach((date) => {
+                            const row = $("<tr class='h-16'></tr>");
+                            row.append("<th class='text-center text-white'>" + date + "</th>");
+                            const startTimeParts = groupedData[date][0].applyDateTime.split('T')[1].slice(0, 5);
+                            const endTimeParts = groupedData[date][1].applyDateTime.split('T')[1].slice(0, 5);
+                            row.append("<td class='text-center text-white'>" + startTimeParts + "</td>");
+                            row.append("<td class='text-center text-white'>" + endTimeParts + "</td>");
+                            if (groupedData[date][1].isVerified) {
+                                row.append("<td class='text-green-500 text-center'>승인완료</td>");
+                            } else {
+                                row.append("<td class='text-blue-400 text-center'>승인요청</td>");
+                            }
+                            items.append(row);
+                        });
                     }
                 },
                 error: function (xhr, status, error) {
@@ -33,12 +52,30 @@
             });
 
             $.ajax({
-                url: `/api/health?userId=${userId}`,
+                url: `/api/health?userId=${userId}&applyYear=2023`,
                 type: 'GET',
                 contentType: 'application/json',
                 success: function (res) {
                     if (res.state === "OK") {
-                        $("#healthCheckList").empty();
+                        const items = $("#healthCheckList");
+                        items.empty();
+                        res.data.forEach((item) => {
+                            const row = $("<tr class='h-16'></tr>");
+                            row.append("<th class='text-center text-white'>" + item.applyYear + "</th>");
+                            row.append("<td class='text-center text-white'>" + (item.applyDate ? item.applyDate : "-") + "</td>");
+
+                            if (item.isCompleted) {
+                                row.append("<td class='text-green-500 text-center'>검진완료</td>");
+                            } else {
+                                row.append("<td class='text-orange-400 text-center'>검진예정</td>");
+                            }
+                            if (item.isVerified) {
+                                row.append("<td class='text-green-500 text-center'>승인완료</td>");
+                            } else {
+                                row.append("<td class='text-blue-400 text-center'>승인요청</td>");
+                            }
+                            items.append(row);
+                        });
                     }
                 },
                 error: function (xhr, status, error) {
@@ -59,13 +96,13 @@
 <header th:replace="~{layouts/header :: header}"></header>
 <div class="flex bg-[#2E2E48]">
     <nav th:replace="~{layouts/menu :: menu}"></nav>
-    <main class="flex-1 flex flex-col h-screen">
+    <main class="flex-1 flex flex-col h-screen max-h-full overflow-y-auto">
         <div th:replace="~{layouts/profile :: profile}"></div>
         <div class="flex flex-1 flex-row">
             <div class="flex flex-[2] flex-col rounded-lg drop-shadow-xl bg-[3A3A5A] m-8 p-4">
                 <h3 class="flex h-12 text-lg text-white font-bold items-center">환영합니다. <span th:text="${name} "></span>
                     고객님</h3>
-                <table>
+                <table class="max-h-[256px]">
                     <thead>
                     <tr>
                         <th class="text-zinc-200">근무 일정</th>
@@ -74,17 +111,17 @@
                         <th class="text-zinc-200">승인여부</th>
                     </tr>
                     </thead>
-                    <tbody id="schduleList">
+                    <tbody id="scheduleList" class="w-full">
                     </tbody>
                 </table>
             </div>
-            <div class="flex flex-1 flex-col rounded-lg drop-shadow-xl bg-[3A3A5A] mr-8 my-8 p-4"></div>
+            <div class="flex flex-1 flex-col mr-8 my-8 p-4"></div>
         </div>
         <div class="flex flex-1 flex-row">
             <div class="flex flex-[2] flex-col rounded-lg drop-shadow-xl bg-[3A3A5A] m-8 p-4">
                 <h3 class="flex h-12 text-lg text-white font-bold items-center"><span th:text="${name} "></span> 고객님의
                     건강검진 현황입니다.</h3>
-                <table>
+                <table class="max-h-[256px]">
                     <thead>
                     <tr>
                         <th class="text-zinc-200">건강검진 예정일</th>
@@ -93,7 +130,7 @@
                         <th class="text-zinc-200">승인여부</th>
                     </tr>
                     </thead>
-                    <tbody id="healthCheckList">
+                    <tbody id="healthCheckList" class="w-full">
                     </tbody>
                 </table>
             </div>

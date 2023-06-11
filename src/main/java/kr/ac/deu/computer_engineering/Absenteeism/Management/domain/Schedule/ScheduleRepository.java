@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
-    List<Schedule> findAllByUserAndApplyDateTimeBetween(User user, LocalDate startDate, LocalDate endDate);
+    List<Schedule> findAllByUserAndApplyDateTimeBetween(User user, LocalDateTime startDate, LocalDateTime endDate);
 
     List<Schedule> findAllByApplyDateTime(LocalDateTime applyDateTime);
 

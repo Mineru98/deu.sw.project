@@ -27,7 +27,7 @@ public class ScheduleService {
     public List<Schedule> getList(Long userId, LocalDate beginDate, LocalDate endDate) {
         Optional<User> user = userRepository.findById(userId);
         if (user.isPresent()) {
-            return scheduleRepository.findAllByUserAndApplyDateTimeBetween(user.get(), beginDate, endDate);
+            return scheduleRepository.findAllByUserAndApplyDateTimeBetween(user.get(), beginDate.atStartOfDay(), endDate.atStartOfDay());
         } else {
             throw new CustomIllegalStateExceptionHandler("존재하지 않는 직원입니다.");
         }

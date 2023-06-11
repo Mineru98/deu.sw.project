@@ -10,6 +10,7 @@ import kr.ac.deu.computer_engineering.Absenteeism.Management.enums.ResState;
 import kr.ac.deu.computer_engineering.Absenteeism.Management.handler.exception.ResponseDTO;
 import kr.ac.deu.computer_engineering.Absenteeism.Management.service.schedule.ScheduleService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -30,8 +31,8 @@ public class ScheduleController {
     @GetMapping("")
     public ResponseEntity<?> getItemList(
             @RequestParam(required = true) Long userId,
-            @RequestParam(required = false) LocalDate beginDate,
-            @RequestParam(required = false) LocalDate endDate
+            @RequestParam(required = false, name = "beginDate", defaultValue = "2023-06-12") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate beginDate,
+            @RequestParam(required = false, name = "endDate", defaultValue = "2023-06-19") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate
     ) {
         List<Schedule> result = scheduleService.getList(userId, beginDate, endDate);
         return new ResponseEntity<>(new ResponseDTO<>(ResState.OK, result), HttpStatus.OK);

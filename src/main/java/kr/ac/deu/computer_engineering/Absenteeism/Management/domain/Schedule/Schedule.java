@@ -50,7 +50,7 @@ public class Schedule {
 
     @Comment("일정종류")
     @Enumerated(EnumType.STRING)
-    @Column(length = 64, nullable = false, unique = true)
+    @Column(length = 64, nullable = false)
     private TypeOfTask typeOfTask;
 
     @Comment("반영날짜")
