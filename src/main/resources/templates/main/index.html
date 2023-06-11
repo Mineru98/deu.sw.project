@@ -13,9 +13,11 @@
     <script>
         const userId = [[${userId}]];
 
-        $(document).ready(function () {
+        function getScheduleList() {
+            const beginDate = $("#beginDate").val().replaceAll(".", "-");
+            const endDate = $("#endDate").val().replaceAll(".", "-");
             $.ajax({
-                url: `/api/schedule?userId=${userId}`,
+                url: `/api/schedule?userId=${userId}&beginDate=${beginDate}&endDate=${endDate}`,
                 type: 'GET',
                 contentType: 'application/json',
                 success: function (res) {
@@ -49,6 +51,50 @@
                         });
                     }
                 }
+            });
+        }
+
+        function startTesting() {
+            const dateTime = $("#dateTime").val();
+            $.ajax({
+                url: `/api/health/testing?dateTime=${dateTime}`,
+                type: 'GET',
+                contentType: 'application/json',
+                success: function (res) {
+                    if (res.state === "OK") {
+                        const items = $("#testing");
+                        items.empty();
+                        res.data.forEach((item) => {
+                            const row = $("<tr class='h-16'></tr>");
+                            row.append("<th class='text-center text-white'>" + item.name + "</th>");
+                            row.append("<th class='text-center text-white'>" + item.birthDay + "</th>");
+                            row.append("<th class='text-center text-white'>" + item.dateOfJoin + "</th>");
+                            items.append(row);
+                        });
+                    }
+                },
+                error: function (xhr, status, error) {
+                    // 오류 처리
+                    if (Object.keys(xhr.responseJSON).filter((t) => t === "state")) {
+                        alert(xhr.responseJSON.message);
+                    } else if (Object.keys(xhr.responseJSON).filter((t) => t === "message")) {
+                        xhr.responseJSON.message.forEach((t) => {
+                            alert(t);
+                        });
+                    }
+                }
+            });
+        }
+
+        $(document).ready(function () {
+            getScheduleList();
+
+            $("#search").on("click", function () {
+                getScheduleList();
+            });
+
+            $("#whiteBoxTesting").on("click", function () {
+                startTesting();
             });
 
             $.ajax({
@@ -102,6 +148,11 @@
             <div class="flex flex-[2] flex-col rounded-lg drop-shadow-xl bg-[3A3A5A] m-8 p-4">
                 <h3 class="flex h-12 text-lg text-white font-bold items-center">환영합니다. <span th:text="${name} "></span>
                     고객님</h3>
+                <div class="flex flex-row justify-end h-16">
+                    <input type="date" value="2023-06-12" name="beginDate" id="beginDate" placeholder="시작날짜" class="input input-bordered input-primary w-full max-w-xs border-indigo-600" />
+                    <input type="date" value="2023-06-19" name="endDate" id="endDate" placeholder="종료날짜" class="input input-bordered input-primary w-full max-w-xs border-indigo-600" />
+                    <button id="search" class="btn px-4 py-1 text-white tracking-wider bg-indigo-600 hover:bg-indigo-500 rounded">조회</button>
+                </div>
                 <table class="max-h-[256px]">
                     <thead>
                     <tr>
@@ -134,7 +185,24 @@
                     </tbody>
                 </table>
             </div>
-            <div class="flex flex-1 flex-col mr-8 my-8 p-4"></div>
+            <div class="flex flex-1 flex-col rounded-lg drop-shadow-xl bg-[3A3A5A] m-8 p-4">
+                <h3 class="flex h-12 text-lg text-white font-bold items-center">화이트박스 테스팅</h3>
+                <div class="flex flex-row justify-end h-16">
+                    <input type="datetime-local" name="dateTime" id="dateTime" placeholder="테스트시각" class="input input-bordered input-primary w-full max-w-xs border-indigo-600" />
+                    <button id="whiteBoxTesting" class="btn px-4 py-1 text-white tracking-wider bg-indigo-600 hover:bg-indigo-500 rounded">테스팅</button>
+                </div>
+                <table class="max-h-[256px]">
+                    <thead>
+                    <tr>
+                        <th class="text-zinc-200">직원명</th>
+                        <th class="text-zinc-200">생년월일</th>
+                        <th class="text-zinc-200">입사일</th>
+                    </tr>
+                    </thead>
+                    <tbody id="testing" class="w-full">
+                    </tbody>
+                </table>
+            </div>
         </div>
     </main>
 </div>

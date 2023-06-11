@@ -107,16 +107,11 @@ public class SchedulerTest {
         }
         userRepository.saveAll(userList);
         for (User user_1 : userList) {
-//            System.out.println("UserId : " + user_1.getId() + ", " +
-//                    "사무직여부 : " + user_1.getIsOfficer() + ", " +
-//                    "생년월일 : " + user_1.getBirthDay() + ", " +
-//                    "입사일 : " + user_1.getDateOfJoin() + ", " +
-//                    "퇴사일 : " + user_1.getDateOfLeave());
-            System.out.println("(" +
-                    user_1.getIsOfficer() + ", " +
-                            user_1.getBirthDay() + ", " +
-                            user_1.getDateOfJoin() + ", " +
-                            user_1.getDateOfLeave() + ")");
+            System.out.println("UserId : " + user_1.getId() + ", " +
+                    "사무직여부 : " + user_1.getIsOfficer() + ", " +
+                    "생년월일 : " + user_1.getBirthDay() + ", " +
+                    "입사일 : " + user_1.getDateOfJoin() + ", " +
+                    "퇴사일 : " + user_1.getDateOfLeave());
         }
         userList = userRepository.findAllByDateOfLeaveIsNullAndDateOfJoinIsNotNullAndDateOfJoinBefore(oneYearAgo);
         // 입사일로부터 1년이 지났고, 퇴사를 하지 않았은 직원들 중 현재 년도에 건강검진을 한 적이 있는 직원 목록을 가져옵니다.
@@ -132,17 +127,12 @@ public class SchedulerTest {
             // 비사무직이거나 사무직인 경우 현재 년도와 생년월일의 홀&짝이 동일한 경우 건강검진 내역을 추가합니다.
             if (!user.getIsOfficer() || user.getIsOfficer() && (currentYear % 2 == (user.getBirthDay().getYear() % 2))) {
                 healthCheck.setApplyYear(currentYear);
-//                    System.out.println("UserId : " + healthCheck.getUser().getId() + ", " +
-//                            "사무직여부 : " + healthCheck.getUser().getIsOfficer() + ", " +
-//                            "생년월일 : " + healthCheck.getUser().getBirthDay() + ", " +
-//                            "입사일 : " + healthCheck.getUser().getDateOfJoin() + ", " +
-//                            "퇴사일 : " + healthCheck.getUser().getDateOfLeave() + ", " +
-//                            "건강검진해당년도 : " + healthCheck.getApplyYear());
-                System.out.println("("+
-                        healthCheck.getUser().getIsOfficer() + ", " +
-                        healthCheck.getUser().getBirthDay() + ", " +
-                        healthCheck.getUser().getDateOfJoin() + ", " +
-                        healthCheck.getUser().getDateOfLeave() + ")");
+                    System.out.println("UserId : " + healthCheck.getUser().getId() + ", " +
+                            "사무직여부 : " + healthCheck.getUser().getIsOfficer() + ", " +
+                            "생년월일 : " + healthCheck.getUser().getBirthDay() + ", " +
+                            "입사일 : " + healthCheck.getUser().getDateOfJoin() + ", " +
+                            "퇴사일 : " + healthCheck.getUser().getDateOfLeave() + ", " +
+                            "건강검진해당년도 : " + healthCheck.getApplyYear());
             }
         }
     }

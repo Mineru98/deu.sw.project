@@ -2,7 +2,6 @@ package kr.ac.deu.computer_engineering.Absenteeism.Management.service.health;
 
 import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.HealthCheckHistory.HealthCheckHistory;
 import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.HealthCheckHistory.HealthCheckHistoryRepository;
-import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.Schedule.Schedule;
 import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.User.User;
 import kr.ac.deu.computer_engineering.Absenteeism.Management.domain.User.UserRepository;
 import kr.ac.deu.computer_engineering.Absenteeism.Management.handler.exception.CustomIllegalStateExceptionHandler;

@@ -10,6 +10,8 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -51,11 +53,45 @@ public class JobService {
             if (!user.getIsOfficer()) {
                 healthCheck.setApplyYear(currentYear);
                 healthCheckHistoryRepository.save(healthCheck);
-            }
-            else if (user.getIsOfficer() && (currentYear % 2 == (user.getBirthDay().getYear() % 2))) {
+            } else if (user.getIsOfficer() && (currentYear % 2 == (user.getBirthDay().getYear() % 2))) {
                 healthCheck.setApplyYear(currentYear);
                 healthCheckHistoryRepository.save(healthCheck);
             }
         }
+    }
+
+    public List<User> whiteBoxTesting(LocalDateTime dateTime) {
+        log.info("SCHEDULER START");
+        List<User> result = new ArrayList<>();
+        if (dateTime.getHour() == 0 && dateTime.getMinute() == 10) {
+            // 현재 년도를 가져옵니다.
+            Integer currentYear = dateTime.getYear();
+            // 현재 날짜에서 1년을 뺀 날짜를 가져옵니다.
+            LocalDate oneYearAgo = LocalDate.from(dateTime).minusYears(1);
+            // 입사일로부터 1년이 지났고, 퇴사를 하지 않았은 직원 목록을 가져옵니다.
+            List<User> userList = userRepository.findAllByDateOfLeaveIsNullAndDateOfJoinIsNotNullAndDateOfJoinBefore(oneYearAgo);
+            // 입사일로부터 1년이 지났고, 퇴사를 하지 않았은 직원들 중 현재 년도에 건강검진을 한 적이 있는 직원 목록을 가져옵니다.
+            List<HealthCheckHistory> histories = healthCheckHistoryRepository.findAllByUserInAndApplyYear(userList, currentYear);
+            List<User> historyUserList = histories.stream().map(HealthCheckHistory::getUser).collect(Collectors.toList());
+            // 현재 년도에 건강검진 내역이 있는 직원을 제거합니다.
+            userList.removeIf(user -> historyUserList.stream().anyMatch(historyUser -> Objects.equals(historyUser.getId(), user.getId())));
+            for (User user : userList) {
+                HealthCheckHistory healthCheck = new HealthCheckHistory();
+                healthCheck.setUser(user);
+                healthCheck.setIsVerified(false);
+                healthCheck.setIsCompleted(false);
+                // 비사무직이거나 사무직인 경우 현재 년도와 생년월일의 홀&짝이 동일한 경우 건강검진 내역을 추가합니다.
+                if (!user.getIsOfficer()) {
+                    healthCheck.setApplyYear(currentYear);
+//                    healthCheckHistoryRepository.save(healthCheck);
+                    result.add(user);
+                } else if (user.getIsOfficer() && (currentYear % 2 == (user.getBirthDay().getYear() % 2))) {
+                    healthCheck.setApplyYear(currentYear);
+//                    healthCheckHistoryRepository.save(healthCheck);
+                    result.add(user);
+                }
+            }
+        }
+        return result;
     }
 }
