@@ -129,6 +129,7 @@
                     contentType: 'application/json',
                     success: function (res) {
                         if (res.state === "CREATED") {
+                            alert("직원 등록이 정상적으로 되었습니다.");
                             window.location.href = "/user/list";
                         }
                     },
